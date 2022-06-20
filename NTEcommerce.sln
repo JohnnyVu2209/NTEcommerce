@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTEcommerce.WebAPI", "NTEcommerce.WebAPI\NTEcommerce.WebAPI.csproj", "{6E7C4F0E-4528-480F-B6AE-FAEB9F2A29A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTEcommerce.CustomerSite", "NTEcommerce.CustomerSite\NTEcommerce.CustomerSite.csproj", "{E2F1B23A-D0EE-411F-80DD-ECC90D9846EB}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "NTEcommerce.AdminSite", "NTEcommerce.AdminSite\NTEcommerce.AdminSite.esproj", "{B717700B-09F7-44B9-9A69-90230C63AD04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTEcommerce.SharedDataModel", "NTEcommerce.SharedDataModel\NTEcommerce.SharedDataModel.csproj", "{DEEB2A60-B44A-4489-9542-ED686772F598}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E7C4F0E-4528-480F-B6AE-FAEB9F2A29A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E7C4F0E-4528-480F-B6AE-FAEB9F2A29A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E7C4F0E-4528-480F-B6AE-FAEB9F2A29A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E7C4F0E-4528-480F-B6AE-FAEB9F2A29A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2F1B23A-D0EE-411F-80DD-ECC90D9846EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2F1B23A-D0EE-411F-80DD-ECC90D9846EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2F1B23A-D0EE-411F-80DD-ECC90D9846EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2F1B23A-D0EE-411F-80DD-ECC90D9846EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B717700B-09F7-44B9-9A69-90230C63AD04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B717700B-09F7-44B9-9A69-90230C63AD04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B717700B-09F7-44B9-9A69-90230C63AD04}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{B717700B-09F7-44B9-9A69-90230C63AD04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B717700B-09F7-44B9-9A69-90230C63AD04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B717700B-09F7-44B9-9A69-90230C63AD04}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{DEEB2A60-B44A-4489-9542-ED686772F598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEEB2A60-B44A-4489-9542-ED686772F598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEEB2A60-B44A-4489-9542-ED686772F598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEEB2A60-B44A-4489-9542-ED686772F598}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4D00546-AB80-450A-9E4F-EFA686AC9AFA}
+	EndGlobalSection
+EndGlobal
