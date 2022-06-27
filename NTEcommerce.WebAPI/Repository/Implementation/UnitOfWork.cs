@@ -9,10 +9,10 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
         public UnitOfWork(EcommerceDbContext context)
         {
             this.context = context;
-            User = new UserRepository(context);
-            Role = new RoleRepository(context);
-            Product = new ProductRepository(context);
-            Category = new CategoryRepository(context);
+            User = new UserRepository(this.context);
+            Role = new RoleRepository(this.context);
+            Product = new ProductRepository(this.context);
+            Category = new CategoryRepository(this.context);
         }
 
         public IUserRepository User { get; private set; }

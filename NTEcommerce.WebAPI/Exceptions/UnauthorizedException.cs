@@ -2,7 +2,7 @@
 
 namespace NTEcommerce.WebAPI.Exceptions
 {
-    public abstract class UnauthorizedException : Exception
+    public class UnauthorizedException : Exception
     {
         public UnauthorizedException(string message) : base(message) { }
     }

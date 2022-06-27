@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NTEcommerce.WebAPI.DBContext;
 
@@ -11,9 +12,10 @@ using NTEcommerce.WebAPI.DBContext;
 namespace NTEcommerce.WebAPI.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    partial class EcommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220627035519_RenameTableAndAddDefaultUser")]
+    partial class RenameTableAndAddDefaultUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -196,9 +198,8 @@ namespace NTEcommerce.WebAPI.Migrations
                         new
                         {
                             Id = new Guid("296722a7-b5ca-4bc7-8bfb-b3f507f6613f"),
-                            ConcurrencyStamp = "41cb85b9-fadf-48e3-871e-d767d423f62d",
-                            Name = "Admin",
-                            NormalizedName = "Admin"
+                            ConcurrencyStamp = "b496a655-1c47-40ad-ad07-14b90d0d2d38",
+                            Name = "Admin"
                         });
                 });
 
@@ -285,17 +286,16 @@ namespace NTEcommerce.WebAPI.Migrations
                         {
                             Id = new Guid("8f9c2357-5b1c-4ea9-9b86-a9f93ac5efa8"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "a97f22db-ae1b-4b20-8a1e-e35b11d2470b",
-                            CreatedDate = new DateTime(2022, 6, 27, 13, 38, 18, 227, DateTimeKind.Local).AddTicks(1595),
+                            ConcurrencyStamp = "6c7730b5-1d9b-4d47-847d-dc5e30ba2948",
+                            CreatedDate = new DateTime(2022, 6, 27, 10, 55, 17, 757, DateTimeKind.Local).AddTicks(1181),
                             EmailConfirmed = false,
                             FullName = "Hương Khôn Vũ",
                             IsDeleted = false,
                             LockoutEnabled = false,
-                            NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEG+Xsg5n7DStf8b6mVHOfzyyUjRLiv6AIex7Loi2VfHj9rZmaK+ye6Ap0pFuQcf4CA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKTrfuqXWv6I/PmJfMHVcOMGqdrgLPtQS74Fr9VJdGpb8gCG+7ppQ+icnWT5Qf2owQ==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UpdatedDate = new DateTime(2022, 6, 27, 13, 38, 18, 227, DateTimeKind.Local).AddTicks(1614),
+                            UpdatedDate = new DateTime(2022, 6, 27, 10, 55, 17, 757, DateTimeKind.Local).AddTicks(1214),
                             UserName = "Admin"
                         });
                 });

@@ -8,7 +8,7 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly EcommerceDbContext context;
+        protected readonly EcommerceDbContext context;
         public GenericRepository(EcommerceDbContext context)
         {
             this.context = context;
