@@ -17,15 +17,12 @@ namespace NTEcommerce.WebAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
         public AuthenticationController(
             UserManager<User> userManager,
-            RoleManager<Role> roleManager,
             IConfiguration configuration)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _configuration = configuration;
         }
         [HttpPost("login")]
@@ -50,7 +47,7 @@ namespace NTEcommerce.WebAPI.Controllers
 
                 var token = GetToken(authClaims);
 
-                return Ok(new ResponseJWT { Token = new JwtSecurityTokenHandler().WriteToken(token), Expiration = token.ValidTo});
+                return Ok(new ResponseJWT { Token = new JwtSecurityTokenHandler().WriteToken(token), Expiration = token.ValidTo, Username = user.UserName});
             }
             return Unauthorized(ErrorCode.USERNAME_OR_PASSWORD_NOT_CORRECT);
 

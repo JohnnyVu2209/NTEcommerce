@@ -5,7 +5,7 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private EcommerceDbContext context;
+        private readonly EcommerceDbContext context;
         public UnitOfWork(EcommerceDbContext context)
         {
             this.context = context;

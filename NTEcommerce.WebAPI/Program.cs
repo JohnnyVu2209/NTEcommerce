@@ -10,16 +10,23 @@ using NTEcommerce.WebAPI.Middleware;
 using NTEcommerce.WebAPI.Model.Identity;
 using NTEcommerce.WebAPI.Repository.Implementation;
 using NTEcommerce.WebAPI.Repository.Interface;
+using NTEcommerce.WebAPI.Services.Implement;
+using NTEcommerce.WebAPI.Services.Interface;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add auto mapper
+builder.Services.AddAutoMapper(typeof(Program));
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 //Add dbContext
-builder.Services.AddDbContext<EcommerceDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<EcommerceDbContext>(options => options
+/*.UseLazyLoadingProxies()*/
+.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddIdentity<User, Role>(options =>
 {
@@ -33,7 +40,9 @@ builder.Services.AddIdentity<User, Role>(options =>
 })
                 .AddEntityFrameworkStores<EcommerceDbContext>()
                 .AddDefaultTokenProviders();
-
+//Add services
+builder.Services.AddTransient<ICategoryServices, CategoryServices>();
+//Add unit of work
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 //Add exception middleware
 builder.Services.AddTransient<ExceptionHandleMiddleware>();

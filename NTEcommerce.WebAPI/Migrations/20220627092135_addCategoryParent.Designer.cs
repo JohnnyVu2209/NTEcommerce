@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NTEcommerce.WebAPI.DBContext;
 
@@ -11,9 +12,10 @@ using NTEcommerce.WebAPI.DBContext;
 namespace NTEcommerce.WebAPI.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    partial class EcommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220627092135_addCategoryParent")]
+    partial class addCategoryParent
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -142,25 +144,23 @@ namespace NTEcommerce.WebAPI.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentCategoryId")
+                    b.Property<Guid>("ParentCategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique()
-                        .HasFilter("[Name] IS NOT NULL");
 
                     b.HasIndex("ParentCategoryId");
 
@@ -198,7 +198,7 @@ namespace NTEcommerce.WebAPI.Migrations
                         new
                         {
                             Id = new Guid("296722a7-b5ca-4bc7-8bfb-b3f507f6613f"),
-                            ConcurrencyStamp = "74963770-bf11-464f-bd18-452b219d086f",
+                            ConcurrencyStamp = "0f1d9a2a-4adc-41d9-ae49-81b971abba14",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         });
@@ -287,17 +287,17 @@ namespace NTEcommerce.WebAPI.Migrations
                         {
                             Id = new Guid("8f9c2357-5b1c-4ea9-9b86-a9f93ac5efa8"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "95c9564d-1a08-4b68-842d-3a8d3cbd288e",
-                            CreatedDate = new DateTime(2022, 6, 29, 23, 52, 5, 189, DateTimeKind.Local).AddTicks(6551),
+                            ConcurrencyStamp = "1da168b0-a5c3-4acb-b9a0-991248fa5329",
+                            CreatedDate = new DateTime(2022, 6, 27, 16, 21, 28, 361, DateTimeKind.Local).AddTicks(2213),
                             EmailConfirmed = false,
                             FullName = "Hương Khôn Vũ",
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMPnK5+plFyEwXfpSQELuDCQimReSngTRAaB8ub7qEcj/cJasehO87Qe0tK4CQkJtw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEL0AO8/hDx80pVVCF2ryFLKwCMbceA2OtM0QPJPjHdMULHM4ug168kNGaiqQGFhR9w==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UpdatedDate = new DateTime(2022, 6, 29, 23, 52, 5, 189, DateTimeKind.Local).AddTicks(6573),
+                            UpdatedDate = new DateTime(2022, 6, 27, 16, 21, 28, 361, DateTimeKind.Local).AddTicks(2266),
                             UserName = "Admin"
                         });
                 });
@@ -308,22 +308,25 @@ namespace NTEcommerce.WebAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Price")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedDate")
@@ -334,52 +337,6 @@ namespace NTEcommerce.WebAPI.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("NTEcommerce.WebAPI.Model.ProductImage", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Images");
-                });
-
-            modelBuilder.Entity("NTEcommerce.WebAPI.Model.ProductReview", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -437,7 +394,9 @@ namespace NTEcommerce.WebAPI.Migrations
                 {
                     b.HasOne("NTEcommerce.WebAPI.Model.Category", "ParentCategory")
                         .WithMany("Categories")
-                        .HasForeignKey("ParentCategoryId");
+                        .HasForeignKey("ParentCategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ParentCategory");
                 });
@@ -446,33 +405,11 @@ namespace NTEcommerce.WebAPI.Migrations
                 {
                     b.HasOne("NTEcommerce.WebAPI.Model.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("NTEcommerce.WebAPI.Model.ProductImage", b =>
-                {
-                    b.HasOne("NTEcommerce.WebAPI.Model.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("NTEcommerce.WebAPI.Model.ProductReview", b =>
-                {
-                    b.HasOne("NTEcommerce.WebAPI.Model.Product", "Product")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ProductId");
-
-                    b.HasOne("NTEcommerce.WebAPI.Model.Identity.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("NTEcommerce.WebAPI.Model.Category", b =>
@@ -480,13 +417,6 @@ namespace NTEcommerce.WebAPI.Migrations
                     b.Navigation("Categories");
 
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("NTEcommerce.WebAPI.Model.Product", b =>
-                {
-                    b.Navigation("Images");
-
-                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

@@ -18,7 +18,9 @@ namespace NTEcommerce.WebAPI.DBContext
         }
 
         public DbSet<Product> Products { get; set; }
-        public DbSet<Category> Categories { get; set; } 
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<ProductImage> Images { get; set; }
+        public DbSet<ProductReview> Reviews { get; set; }
 
         public override int SaveChanges()
         {
@@ -141,6 +143,12 @@ namespace NTEcommerce.WebAPI.DBContext
             builder.Entity<IdentityUserToken<Guid>>(entity =>
             {
                 entity.ToTable(name: "UserTokens");
+            });
+
+            builder.Entity<Category>(entity =>
+            {
+                entity.HasIndex(x => x.Name)
+                .IsUnique();
             });
             base.OnModelCreating(builder);
         }

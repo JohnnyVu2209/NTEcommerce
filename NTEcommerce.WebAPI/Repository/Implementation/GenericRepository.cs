@@ -44,9 +44,9 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
             return await context.Set<T>().ToListAsync();
         }
 
-        public T GetById(Guid id)
+        public async Task<T> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await context.Set<T>().FindAsync(id);
         }
 
         public void Update(T entity)
