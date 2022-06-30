@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Moq;
 using NTEcommerce.SharedDataModel;
+using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Model;
 using NTEcommerce.WebAPI.Repository.Interface;
 using NTEcommerce.WebAPI.Services.Implement;

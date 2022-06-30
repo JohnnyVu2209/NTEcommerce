@@ -34,6 +34,11 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
             context.Set<T>().RemoveRange(entities);
         }
 
+        public IQueryable<T> FindAll()
+        {
+            return context.Set<T>();
+        }
+
         public async Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> expression)
         {
             return await context.Set<T>().Where(expression).ToListAsync();

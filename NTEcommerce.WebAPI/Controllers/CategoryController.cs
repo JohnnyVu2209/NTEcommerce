@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using NTEcommerce.SharedDataModel;
+using Newtonsoft.Json;
+using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Services.Interface;
 
@@ -21,6 +22,23 @@ namespace NTEcommerce.WebAPI.Controllers
         public async Task<IActionResult> CreateCategory(CreateCategoryModel categoryModel)
         {
             return Ok(await categoryServices.CreateCategory(categoryModel));
+        }
+        [HttpGet("getList")]
+        public async Task<IActionResult> GetListCategory([FromQuery] CategoryParameters parameters)
+        {
+            var categories = await categoryServices.GetList(parameters);
+            var metadata = new
+            {
+                categories.TotalCount,
+                categories.PageSize,
+                categories.CurrentPage,
+                categories.TotalPages,
+                categories.HasNext,
+                categories.HasPrevious
+            };
+            Response.Headers.Add("Pagination", JsonConvert.SerializeObject(metadata));
+
+            return Ok(categories);
         }
     }
 }

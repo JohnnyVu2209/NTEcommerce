@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using NTEcommerce.SharedDataModel;
+using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Model;
 
 namespace NTEcommerce.WebAPI.AutoMapper
@@ -11,7 +11,7 @@ namespace NTEcommerce.WebAPI.AutoMapper
             CreateMap<CreateCategoryModel, Category>();
 
             CreateMap<Category, CategoryModel>()
-                .ForMember(d => d.CategoryParent, opt => opt.MapFrom(s => s.ParentCategory != null ? s.ParentCategory.Name : null));
+                .ForMember(d => d.CategoryParent, opt => opt.MapFrom(s => s.ParentCategory != null ? s.ParentCategory : null));
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using NTEcommerce.SharedDataModel;
+using NTEcommerce.SharedDataModel.Category;
+using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Exceptions;
 using NTEcommerce.WebAPI.Model;
 using NTEcommerce.WebAPI.Repository.Interface;
@@ -48,6 +49,16 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 logger.LogError($"***Something went wrong: {e.Message}");
                 throw new BadRequestException(ErrorCode.CREATE_CATEGORY_FAILED);
             }
+        }
+
+        public async Task<PagedList<Category, CategoryModel>?> GetList(CategoryParameters parameters)
+        {
+            var categoryList = unitOfWork.Category.FindAll().OrderBy(x => x.Name);
+            return PagedList<Category, CategoryModel>.ToPageList(categoryList,
+                parameters.PageNumber,
+                parameters.PageSize,
+                mapper);
+
         }
     }
 }

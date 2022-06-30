@@ -6,6 +6,7 @@ namespace NTEcommerce.WebAPI.Repository.Interface
     {
         Task<T> GetById(Guid id);
         Task<IEnumerable<T>> GetAll();
+        IQueryable<T> FindAll();
         Task<IEnumerable<T>> FindAsync(Expression<Func<T,bool>> expression);
         Task AddAsync(T entity);
         void Update(T entity);
