@@ -2,7 +2,7 @@
 
 namespace NTEcommerce.WebAPI.Model
 {
-    public class ProductReview
+    public class ProductReview:BaseEntity
     {
         public Guid Id { get; set; }
         public string? Comment { get; set; }

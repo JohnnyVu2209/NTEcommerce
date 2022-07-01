@@ -8,5 +8,6 @@ namespace NTEcommerce.WebAPI.Services.Interface
     {
         Task<CategoryModel> CreateCategory(CreateCategoryModel categoryModel);
         Task<PagedList<Category,CategoryModel>?> GetList(CategoryParameters parameters);
+        Task<CategoryDetailModel?> GetCategory(Guid id);
     }
 }

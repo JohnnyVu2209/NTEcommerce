@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -42,6 +43,7 @@ builder.Services.AddIdentity<User, Role>(options =>
                 .AddDefaultTokenProviders();
 //Add services
 builder.Services.AddTransient<ICategoryServices, CategoryServices>();
+builder.Services.AddTransient<IProductServices, ProductServices>();
 //Add unit of work
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 //Add exception middleware
@@ -104,6 +106,8 @@ builder.Services.AddSwaggerGen(c =>
                 });
 });
 
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -112,6 +116,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine( app.Environment.ContentRootPath, "Resource", "ProductImages")),
+    RequestPath = "/Product"
+});
 
 app.UseMiddleware<ExceptionHandleMiddleware>();
 

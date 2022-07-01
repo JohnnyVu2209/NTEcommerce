@@ -40,5 +40,10 @@ namespace NTEcommerce.WebAPI.Controllers
 
             return Ok(categories);
         }
+        [HttpGet("getCategory/{id}")]
+        public async Task<IActionResult> GetCategory(Guid id)
+        {
+            return Ok(await categoryServices.GetCategory(id));
+        }
     }
 }

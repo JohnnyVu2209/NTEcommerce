@@ -20,6 +20,11 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
             return true;
         }
 
+        public async Task<Category> FindByIdAsync(Guid id)
+        {
+            return await context.Categories.Include(x => x.ParentCategory).Include(x => x.Products).FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<Category> FindByNameAsync(string name)
         {
             return await context.Categories.Where(x => x.Name == name).FirstOrDefaultAsync();

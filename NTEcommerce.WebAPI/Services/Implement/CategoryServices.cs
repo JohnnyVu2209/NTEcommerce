@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Exceptions;
@@ -33,7 +34,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 {
                     var categoryParent = await unitOfWork.Category.GetById((Guid)categoryModel.ParentId);
                     if (categoryParent == null)
-                        throw new BadRequestException(ErrorCode.CATEGORY_NOT_EXIST);
+                        throw new BadRequestException(ErrorCode.CATEGORY_NOT_FOUNDED);
 
                     newCategory.ParentCategory = categoryParent;
                 }
@@ -51,9 +52,20 @@ namespace NTEcommerce.WebAPI.Services.Implement
             }
         }
 
+        public async Task<CategoryDetailModel?> GetCategory(Guid id)
+        {
+            var category = await unitOfWork.Category.FindByIdAsync(id);
+
+            if (category == null)
+                throw new NotFoundException(ErrorCode.CATEGORY_NOT_FOUNDED);
+
+            var categoryModel = mapper.Map<CategoryDetailModel>(category);
+            return categoryModel;
+        }
+
         public async Task<PagedList<Category, CategoryModel>?> GetList(CategoryParameters parameters)
         {
-            var categoryList = unitOfWork.Category.FindAll().OrderBy(x => x.Name);
+            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(c => c.Products).OrderBy(x => x.Name);
             return PagedList<Category, CategoryModel>.ToPageList(categoryList,
                 parameters.PageNumber,
                 parameters.PageSize,

@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace NTEcommerce.SharedDataModel.Category
 {
-    public class CategoryModel
+    public class CategoryDetailModel
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         public CategoryModel? CategoryParent { get; set; }
-        public int TotalProduct { get; set; }
+        public List<ProductModel>? Products { get; set; }
     }
 }

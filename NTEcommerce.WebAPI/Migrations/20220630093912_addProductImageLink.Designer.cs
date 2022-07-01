@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NTEcommerce.WebAPI.DBContext;
 
@@ -11,9 +12,10 @@ using NTEcommerce.WebAPI.DBContext;
 namespace NTEcommerce.WebAPI.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    partial class EcommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220630093912_addProductImageLink")]
+    partial class addProductImageLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -198,7 +200,7 @@ namespace NTEcommerce.WebAPI.Migrations
                         new
                         {
                             Id = new Guid("296722a7-b5ca-4bc7-8bfb-b3f507f6613f"),
-                            ConcurrencyStamp = "7734ae3c-276d-4795-b4a9-973508348124",
+                            ConcurrencyStamp = "a469c92f-acb9-407d-b697-28b176dd2035",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         });
@@ -287,17 +289,17 @@ namespace NTEcommerce.WebAPI.Migrations
                         {
                             Id = new Guid("8f9c2357-5b1c-4ea9-9b86-a9f93ac5efa8"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ce7928c9-f1e3-4a2f-9a2f-ef98a36129f6",
-                            CreatedDate = new DateTime(2022, 7, 1, 12, 41, 7, 903, DateTimeKind.Local).AddTicks(3462),
+                            ConcurrencyStamp = "73e066ce-d3ff-4301-894b-51b60824783e",
+                            CreatedDate = new DateTime(2022, 6, 30, 16, 39, 6, 796, DateTimeKind.Local).AddTicks(4548),
                             EmailConfirmed = false,
                             FullName = "Hương Khôn Vũ",
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHYZY10WuUz/hjMqXexg/AMC2ZJn+kSjNjb39JF1KZqleDaAecyCGq3K3bIdv3wZhw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAED3ZJSx9kYtQvmAn5k5xztDVv7D6YFlsTZfmUUnaJz+nnyl+MhjMrrV2d4EcHNJB/A==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UpdatedDate = new DateTime(2022, 7, 1, 12, 41, 7, 903, DateTimeKind.Local).AddTicks(3487),
+                            UpdatedDate = new DateTime(2022, 6, 30, 16, 39, 6, 796, DateTimeKind.Local).AddTicks(4591),
                             UserName = "Admin"
                         });
                 });
@@ -367,20 +369,11 @@ namespace NTEcommerce.WebAPI.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<Guid?>("ProductId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("Rating")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");

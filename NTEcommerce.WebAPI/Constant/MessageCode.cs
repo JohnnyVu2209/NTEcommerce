@@ -15,7 +15,11 @@
             //Category
             public static string CATEGORY_NAME_ALREADY_EXISTED = "ERR_CATEGORY_NAME_ALREADY_EXISTED";
             public static string CREATE_CATEGORY_FAILED = "ERR_CREATE_CATEGORY_FAILED";
-            public static string CATEGORY_NOT_EXIST = "ERR_CATEGORY_NOT_EXIST";
+            public static string CATEGORY_NOT_FOUNDED = "ERR_CATEGORY_NOT_FOUNDED";
+
+            //Product
+            public static string CREATE_PRODUCT_FAILED = "ERR_CREATE_PRODUCT_FAILED";
+            public static string PRODUCT_NOT_FOUNDED  = "ERR_PRODUCT_NOT_FOUNDED";
         }
     }
 }

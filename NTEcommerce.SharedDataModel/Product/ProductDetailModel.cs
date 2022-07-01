@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NTEcommerce.SharedDataModel.Product
 {
-    public class ProductModel
+    public class ProductDetailModel
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
@@ -15,5 +15,6 @@ namespace NTEcommerce.SharedDataModel.Product
         public string? Category { get; set; }
         public double? AvgRating { get; set; }
         public List<string>? Images { get; set; }
+        public List<ProductReviewModel> Reviews { get; set; }
     }
 }

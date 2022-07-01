@@ -34,4 +34,8 @@
     <ProjectReference Include="..\NTEcommerce.SharedDataModel\NTEcommerce.SharedDataModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resource\ProductImages\" />
+  </ItemGroup>
+
 </Project>

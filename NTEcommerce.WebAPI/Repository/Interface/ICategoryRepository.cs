@@ -6,5 +6,6 @@ namespace NTEcommerce.WebAPI.Repository.Interface
     {
         Task<Category> FindByNameAsync(string name);
         Task<bool> CheckExistName(string name);
+        Task<Category> FindByIdAsync(Guid id);
     }
 }
