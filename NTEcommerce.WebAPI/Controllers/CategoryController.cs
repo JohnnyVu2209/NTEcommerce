@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using NTEcommerce.SharedDataModel;
 using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Services.Interface;

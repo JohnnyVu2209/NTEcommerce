@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using NTEcommerce.SharedDataModel;
 using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Exceptions;
@@ -65,7 +66,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
         public async Task<PagedList<Category, CategoryModel>?> GetList(CategoryParameters parameters)
         {
-            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(c => c.Products).OrderBy(x => x.Name);
+            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(c => c.Products).OrderByDescending(x => x.UpdatedDate);
             return PagedList<Category, CategoryModel>.ToPageList(categoryList,
                 parameters.PageNumber,
                 parameters.PageSize,

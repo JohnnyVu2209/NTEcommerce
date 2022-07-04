@@ -1,4 +1,5 @@
-﻿using NTEcommerce.SharedDataModel.Category;
+﻿using NTEcommerce.SharedDataModel;
+using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Model;
 

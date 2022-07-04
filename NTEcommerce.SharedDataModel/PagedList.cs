@@ -1,16 +1,8 @@
-﻿using AutoMapper;
-using NTEcommerce.SharedDataModel.Product;
-using NTEcommerce.WebAPI.Model;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 
-namespace NTEcommerce.WebAPI.Services
+namespace NTEcommerce.SharedDataModel
 {
-    //T1 is model, T2 is output model
+     //T1 is model, T2 is output model
     public class PagedList<T1, T2> : List<T2> where T1 : class
     {
         public int CurrentPage { get; private set; }
@@ -47,7 +39,6 @@ namespace NTEcommerce.WebAPI.Services
                         Product item = (Product)items[j];
                         if (itemModel.Id == item.Id)
                             item.Images = GetImages(item.Images);
-
                     }
                 }
             }*/
@@ -62,5 +53,5 @@ namespace NTEcommerce.WebAPI.Services
 
             return new PagedList<T1, T2>(itemT2, count, pageNumber, pageSize);
         }
-    }
+    }   
 }

@@ -1,35 +1,35 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NTEcommerce.CustomerSite.Models;
-using System.Diagnostics;
+using NTEcommerce.SharedDataModel.Category;
 
-namespace NTEcommerce.CustomerSite.Controllers
+namespace NTEcommerce.CustomerSite.Controllers;
+
+public class HomeController : Controller
 {
-    [Authorize]
-    public class HomeController : Controller
+    private readonly ILogger<HomeController> _logger;
+    private readonly ICategoryService _service;
+
+    public HomeController(ILogger<HomeController> logger, ICategoryService service)
     {
-        private readonly ILogger<HomeController> _logger;
+        _logger = logger;
+        _service = service;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+    public async Task<IActionResult> Index()
+    {
+        // var data = await _service.GetCategories(new CategoryParameters{PageNumber=1, PageSize = 10});
+        return View();
+    }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public IActionResult Privacy()
+    {
+        return View();
+    }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

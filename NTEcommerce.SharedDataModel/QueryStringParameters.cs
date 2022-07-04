@@ -1,4 +1,4 @@
-﻿namespace NTEcommerce.WebAPI.Constant
+namespace NTEcommerce.SharedDataModel
 {
     public abstract class QueryStringParameters
     {

@@ -1,4 +1,5 @@
-﻿using NTEcommerce.SharedDataModel.Product;
+﻿using NTEcommerce.SharedDataModel;
+using NTEcommerce.SharedDataModel.Product;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Model;
 

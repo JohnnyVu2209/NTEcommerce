@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using NTEcommerce.SharedDataModel;
 using NTEcommerce.SharedDataModel.Product;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Exceptions;
@@ -125,10 +126,10 @@ namespace NTEcommerce.WebAPI.Services.Implement
             if (products.Any() && !string.IsNullOrWhiteSpace(parameters.ProductName))
                 products = products.Where(p => p.Name.Contains(parameters.ProductName));
 
-            return PagedList<Product, ProductModel>.ToPageList(products.OrderBy(p => p.UpdatedDate),
-                parameters.PageNumber,
-                parameters.PageSize,
-                mapper);
+            return PagedList<Product, ProductModel>.ToPageList(products.OrderByDescending(p => p.UpdatedDate),
+                                                               parameters.PageNumber,
+                                                               parameters.PageSize,
+                                                               mapper);
         }
 
         public async Task<ProductDetailModel> GetProduct(Guid id)
