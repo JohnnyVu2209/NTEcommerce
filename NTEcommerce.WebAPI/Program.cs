@@ -17,6 +17,14 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add cors
+builder.Services.AddCors(options => {
+    options.AddPolicy("FreePolicy", 
+    policy => {
+        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().WithExposedHeaders("Pagination");
+    });
+});
+
 //Add auto mapper
 builder.Services.AddAutoMapper(typeof(Program));
 // Add services to the container.
@@ -126,6 +134,8 @@ app.UseStaticFiles(new StaticFileOptions
 app.UseMiddleware<ExceptionHandleMiddleware>();
 
 app.UseHttpsRedirection();
+
+app.UseCors("FreePolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();

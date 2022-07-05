@@ -1,11 +1,32 @@
 {
     "version": "0.2.0",
     "configurations": [
+
+        {
+            "name": "Server",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/NTEcommerce.WebAPI/bin/Debug/net6.0/NTEcommerce.WebAPI.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/NTEcommerce.WebAPI",
+            "stopAtEntry": false,
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Views": "${workspaceFolder}/Views"
+            }
+        },
         {
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
             // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": ".NET Core Launch (web)",
+            "name": "Client",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",

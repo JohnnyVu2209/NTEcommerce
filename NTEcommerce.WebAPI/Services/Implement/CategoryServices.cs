@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using NTEcommerce.SharedDataModel;
-using NTEcommerce.SharedDataModel.Category;
-using NTEcommerce.WebAPI.Constant;
-using NTEcommerce.WebAPI.Exceptions;
+using System.Text;
+using System.Reflection;
 using NTEcommerce.WebAPI.Model;
-using NTEcommerce.WebAPI.Repository.Interface;
+using System.Linq.Dynamic.Core;
+using NTEcommerce.SharedDataModel;
+using Microsoft.EntityFrameworkCore;
+using NTEcommerce.WebAPI.Exceptions;
+using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Services.Interface;
+using NTEcommerce.WebAPI.Repository.Interface;
 using static NTEcommerce.WebAPI.Constant.MessageCode;
 
 namespace NTEcommerce.WebAPI.Services.Implement
@@ -66,12 +68,59 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
         public async Task<PagedList<Category, CategoryModel>?> GetList(CategoryParameters parameters)
         {
-            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(c => c.Products).OrderByDescending(x => x.UpdatedDate);
+            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(c => c.Products).AsQueryable();
+
+            if (categoryList.Any() && !string.IsNullOrWhiteSpace(parameters.Name))
+                categoryList = categoryList.Where(x => x.Name.Contains(parameters.Name));
+                
+            ApplySort(ref categoryList, parameters.OrderBy);
+
             return PagedList<Category, CategoryModel>.ToPageList(categoryList,
                 parameters.PageNumber,
                 parameters.PageSize,
                 mapper);
 
+        }
+
+        private void ApplySort(ref IQueryable<Category> categories, string orderByQueryString)
+        {
+            if (!categories.Any())
+                return;
+
+            if (string.IsNullOrWhiteSpace(orderByQueryString))
+            {
+                categories = categories.OrderByDescending(x => x.UpdatedDate);
+                return;
+            }
+
+            var orderParams = orderByQueryString.Trim().Split(',');
+            var propertyInfos = typeof(Category).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            var orderQueryBuilder = new StringBuilder();
+
+            foreach (var param in orderParams)
+            {
+                if(string.IsNullOrWhiteSpace(param))
+                    continue;
+                
+                var propertyFromQueryName = param.Split(" ")[0];
+                var objectProperty = propertyInfos.FirstOrDefault(pi => pi.Name.Equals(propertyFromQueryName, StringComparison.CurrentCultureIgnoreCase));
+
+                if(objectProperty == null)
+                    continue;
+                
+                var sortingOrder = param.EndsWith(" desc") ? "descending" : "ascending";
+                orderQueryBuilder.Append($"{objectProperty.Name.ToString()} {sortingOrder}, ");
+            }
+
+            var orderQuery = orderQueryBuilder.ToString().TrimEnd(',', ' ');
+
+            if(string.IsNullOrWhiteSpace(orderQuery))
+            {
+                categories = categories.OrderByDescending(x => x.UpdatedDate);
+                return;
+            }
+
+            categories = categories.OrderBy(orderQuery);
         }
     }
 }

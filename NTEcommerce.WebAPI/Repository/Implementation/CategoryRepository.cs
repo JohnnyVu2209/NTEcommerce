@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using Microsoft.EntityFrameworkCore;
 using NTEcommerce.WebAPI.DBContext;
 using NTEcommerce.WebAPI.Model;
 using NTEcommerce.WebAPI.Repository.Interface;
@@ -29,5 +30,7 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
         {
             return await context.Categories.Where(x => x.Name == name).FirstOrDefaultAsync();
         }
+
+        
     }
 }
