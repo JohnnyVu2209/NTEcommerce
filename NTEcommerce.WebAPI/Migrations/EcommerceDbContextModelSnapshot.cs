@@ -153,6 +153,9 @@ namespace NTEcommerce.WebAPI.Migrations
                     b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("TotalProducts")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
@@ -198,7 +201,7 @@ namespace NTEcommerce.WebAPI.Migrations
                         new
                         {
                             Id = new Guid("296722a7-b5ca-4bc7-8bfb-b3f507f6613f"),
-                            ConcurrencyStamp = "7734ae3c-276d-4795-b4a9-973508348124",
+                            ConcurrencyStamp = "a7237d10-82af-4ad2-9d01-a42c58e1e725",
                             Name = "Admin",
                             NormalizedName = "Admin"
                         });
@@ -287,17 +290,17 @@ namespace NTEcommerce.WebAPI.Migrations
                         {
                             Id = new Guid("8f9c2357-5b1c-4ea9-9b86-a9f93ac5efa8"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ce7928c9-f1e3-4a2f-9a2f-ef98a36129f6",
-                            CreatedDate = new DateTime(2022, 7, 1, 12, 41, 7, 903, DateTimeKind.Local).AddTicks(3462),
+                            ConcurrencyStamp = "2641757e-550c-409c-a2ed-08ff792009c4",
+                            CreatedDate = new DateTime(2022, 7, 6, 14, 39, 56, 932, DateTimeKind.Local).AddTicks(6686),
                             EmailConfirmed = false,
                             FullName = "Hương Khôn Vũ",
                             IsDeleted = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHYZY10WuUz/hjMqXexg/AMC2ZJn+kSjNjb39JF1KZqleDaAecyCGq3K3bIdv3wZhw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEF/+dVsKc7fFYP2uPHmqG5cNX2sAOp008mvm7jalsbYfGhfFGQHuh7AfuUctIUqFtA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UpdatedDate = new DateTime(2022, 7, 1, 12, 41, 7, 903, DateTimeKind.Local).AddTicks(3487),
+                            UpdatedDate = new DateTime(2022, 7, 6, 14, 39, 56, 932, DateTimeKind.Local).AddTicks(6708),
                             UserName = "Admin"
                         });
                 });

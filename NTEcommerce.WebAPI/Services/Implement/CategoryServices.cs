@@ -68,7 +68,15 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
         public async Task<PagedList<Category, CategoryModel>?> GetList(CategoryParameters parameters)
         {
-            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(c => c.Products).AsQueryable();
+            var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(x => x.Categories).Include(c => c.Products).AsQueryable();
+            
+            // var counts = new Dictionary<Category, int>();
+            // foreach (var category in categoryList.ToList())
+            // {
+            //     category.TotalProducts = TotalProducts(category);
+            //     unitOfWork.Category.Update(category);
+            // }
+            // await unitOfWork.SaveAsync();
 
             if (categoryList.Any() && !string.IsNullOrWhiteSpace(parameters.Name))
                 categoryList = categoryList.Where(x => x.Name.Contains(parameters.Name));
@@ -80,6 +88,18 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 parameters.PageSize,
                 mapper);
 
+        }
+        private int TotalProducts(Category category)
+        {
+            var totalProducts = category.Products.Count;
+            foreach (var innerCategory in category.Categories)
+            {
+                totalProducts += TotalProducts(innerCategory);
+            }
+            return totalProducts;
+
+            //OR
+            //return category.Questions.Count + category.Categories.Sum(innerCategory => TotalQuestions(innerCategory));
         }
 
         private void ApplySort(ref IQueryable<Category> categories, string orderByQueryString)

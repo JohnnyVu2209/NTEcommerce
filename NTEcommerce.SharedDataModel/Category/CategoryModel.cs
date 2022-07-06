@@ -12,6 +12,6 @@ namespace NTEcommerce.SharedDataModel.Category
         public string? Name { get; set; }
         public string? Description { get; set; }
         public CategoryModel? CategoryParent { get; set; }
-        public int TotalProduct { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

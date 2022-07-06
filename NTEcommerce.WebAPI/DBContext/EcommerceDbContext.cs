@@ -71,6 +71,12 @@ namespace NTEcommerce.WebAPI.DBContext
                         e.State == EntityState.Added
                         || e.State == EntityState.Modified));
 
+            var productEntries = ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is Product && (
+                    e.State == EntityState.Added
+                ));
+
             foreach (var entityEntry in entries)
             {
                 ((BaseEntity)entityEntry.Entity).UpdatedDate = DateTime.Now;
@@ -89,6 +95,16 @@ namespace NTEcommerce.WebAPI.DBContext
                     ((User)entityEntry.Entity).CreatedDate = DateTime.Now;
                 }
             }
+            // foreach (var entityEntry in productEntries)
+            // {
+            //     var product = ((Product)entityEntry.Entity);
+            //     if(product.Category != null){
+            //         product.Category.TotalProducts++;
+            //         if(product.Category.ParentCategory != null){
+            //             product.Category.ParentCategory.TotalProducts++;
+            //         }
+            //     }
+            // }
             return base.SaveChangesAsync(cancellationToken);
         }
 
@@ -147,6 +163,10 @@ namespace NTEcommerce.WebAPI.DBContext
 
             builder.Entity<Category>(entity =>
             {
+                entity.HasOne(x => x.ParentCategory)
+                .WithMany(x => x.Categories)
+                .HasForeignKey(x => x.ParentCategoryId);
+
                 entity.HasIndex(x => x.Name)
                 .IsUnique();
             });

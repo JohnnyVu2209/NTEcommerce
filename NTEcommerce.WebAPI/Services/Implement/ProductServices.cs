@@ -69,7 +69,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
                 if(newProduct.Images.Count != 0)
                 {
-                    SaveImages(productModel.Images);
+                     await SaveImages(productModel.Images);
                 }
 
                 var newProductModel = mapper.Map<ProductModel>(newProduct);
