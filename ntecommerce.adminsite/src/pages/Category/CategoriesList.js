@@ -157,7 +157,7 @@ export default function Category() {
           <Typography variant="h4" gutterBottom>
             Category
           </Typography>
-          <Button variant="contained" component={RouterLink} to="#" startIcon={<Iconify icon="eva:plus-fill" />}>
+          <Button variant="contained" component={RouterLink} to="/dashboard/category/create" startIcon={<Iconify icon="eva:plus-fill" />}>
             New Category
           </Button>
         </Stack>
@@ -219,7 +219,6 @@ export default function Category() {
                       </TableRow>
                     );
                   })}
-                  {console.log(emptyRows)}
                   {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />

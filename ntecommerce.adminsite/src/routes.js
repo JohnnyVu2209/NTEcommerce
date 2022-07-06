@@ -11,6 +11,7 @@ import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import Category from './pages/Category/CategoriesList';
+import CreateCategory from './pages/Category/CreateCategory';
 
 // ----------------------------------------------------------------------
 
@@ -23,8 +24,17 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'products', element: <Products /> },
-        { path: 'category', element: <Category /> },
         { path: 'blog', element: <Blog /> },
+        {
+          path: 'category',
+          element: <Category />,
+          children: [
+            {
+              path: 'create',
+              element: <CreateCategory />,
+            },
+          ],
+        },
       ],
     },
     {
