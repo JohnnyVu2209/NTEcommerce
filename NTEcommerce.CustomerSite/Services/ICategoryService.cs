@@ -1,7 +1,7 @@
 using NTEcommerce.SharedDataModel.Category;
 using Refit;
 
-namespace NTEcommerce.CustomerSite.Models;
+namespace NTEcommerce.CustomerSite.Services;
 
 public interface ICategoryService
 {

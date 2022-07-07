@@ -6,8 +6,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddRefitClient<ICategoryService>()
-.ConfigureHttpClient(c => c.BaseAddress = new Uri("https://localhost:7012/api/"));
 
 var app = builder.Build();
 

@@ -1,25 +1,27 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using NTEcommerce.CustomerSite.Models;
+using NTEcommerce.CustomerSite.Services;
 using NTEcommerce.SharedDataModel.Category;
+using Refit;
 
 namespace NTEcommerce.CustomerSite.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly ICategoryService _service;
+    /*private readonly ICategoryService _service;*/
+    ICategoryService categoryService = RestService.For<ICategoryService>("https://localhost:7012/api");
 
-    public HomeController(ILogger<HomeController> logger, ICategoryService service)
+    public HomeController(ILogger<HomeController> logger)
     {
         _logger = logger;
-        _service = service;
     }
 
     public async Task<IActionResult> Index()
     {
-        // var data = await _service.GetCategories(new CategoryParameters{PageNumber=1, PageSize = 10});
-        return View();
+        var data = await categoryService.GetCategories(new CategoryParameters{PageNumber=1, PageSize = 10});
+        return View(data);
     }
 
     public IActionResult Privacy()

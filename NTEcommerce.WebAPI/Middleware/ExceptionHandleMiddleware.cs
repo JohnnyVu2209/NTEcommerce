@@ -19,6 +19,7 @@ namespace NTEcommerce.WebAPI.Middleware
             }
             catch (Exception e)
             {
+                _logger.LogError("***Something went wrong***");
                 _logger.LogError(e, e.Message);
                 await HandleExceptionAsync(context, e);
             }

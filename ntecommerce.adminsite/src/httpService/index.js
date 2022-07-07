@@ -9,9 +9,9 @@ const instance = axios.create({
 
 const get = (url, params) => instance.get(url, { params});
 
-const post = (url, params, data) =>  instance.post(url, data, {params});
+const post = (url, data, params) =>  instance.post(url, data, {params});
 
-const postForm = (url, params, data) => instance.postForm(url, data, {params});
+const postForm = (url, data, params) => instance.postForm(url, data, {params});
 
 const put = (url, params, data) => instance.put(url, data, {params});
 

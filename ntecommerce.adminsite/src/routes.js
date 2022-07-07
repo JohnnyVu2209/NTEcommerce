@@ -3,6 +3,8 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 //
+import Category from './pages/Category/CategoriesList';
+import CreateCategory from './pages/Category/CreateCategory';
 import Blog from './pages/Blog';
 import User from './pages/User';
 import Login from './pages/Login';
@@ -10,8 +12,7 @@ import NotFound from './pages/Page404';
 import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
-import Category from './pages/Category/CategoriesList';
-import CreateCategory from './pages/Category/CreateCategory';
+import CategoryDetail from './pages/Category/CategoryDetail';
 
 // ----------------------------------------------------------------------
 
@@ -27,13 +28,15 @@ export default function Router() {
         { path: 'blog', element: <Blog /> },
         {
           path: 'category',
-          element: <Category />,
-          children: [
-            {
-              path: 'create',
-              element: <CreateCategory />,
-            },
-          ],
+          element: <Category />
+        },
+        {
+          path: 'category/create',
+          element: <CreateCategory />,
+        },
+        {
+          path: 'category/detail/:id',
+          element: <CategoryDetail />,
         },
       ],
     },

@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { useEffect, useState } from 'react';
 import { sentenceCase } from 'change-case';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, Outlet, useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -17,6 +17,7 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
+import HTMLEllipsis from 'react-lines-ellipsis/lib/html'
 
 // components
 import Page from '../../components/Page';
@@ -36,7 +37,7 @@ import { fDate } from '../../utils/formatTime';
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
   { id: 'description', label: 'Description', alignRight: false },
-  { id: 'crearedDate', label: 'Created Date', alignRight: false },
+  { id: 'createdDate', label: 'Created Date', alignRight: false },
   { id: '' },
 ];
 
@@ -77,6 +78,8 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function Category() {
+  const navigate = useNavigate();
+
   const [data, setData] = useState([]);
 
   const [page, setPage] = useState(1);
@@ -92,6 +95,8 @@ export default function Category() {
   const [filterName, setFilterName] = useState('');
 
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [useEllipsis, setUseEllipsis] = useState(true);
 
   useEffect(() => {
     categoryService.getListCategories(page, rowsPerPage, filterName, `${orderBy} ${order}`).then((response) => {
@@ -129,6 +134,7 @@ export default function Category() {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
+    console.log(property)
   };
 
   const handleChangePage = (event, newPage) => {
@@ -144,6 +150,11 @@ export default function Category() {
     setFilterName(event.target.value);
   };
 
+  const handleTextClick = (e) => {
+    e.preventDefault()
+    setUseEllipsis(!useEllipsis);
+  }
+
   const emptyRows = page > 1 ? Math.max(0, page * rowsPerPage - totalCount) : 0;
 
   const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName);
@@ -151,105 +162,122 @@ export default function Category() {
   const isUserNotFound = data.length === 0;
 
   return (
-    <Page title="Category">
-      <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Category
-          </Typography>
-          <Button variant="contained" component={RouterLink} to="/dashboard/category/create" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Category
-          </Button>
-        </Stack>
+    <>
+      <Page title="Category">
+        <Container>
+          <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+            <Typography variant="h4" gutterBottom>
+              Category
+            </Typography>
+            <Button variant="contained" component={RouterLink} to="../category/create" startIcon={<Iconify icon="eva:plus-fill" />}>
+              New Category
+            </Button>
+          </Stack>
 
-        <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <Card>
+            <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={data.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {data.map((row) => {
-                    // const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                    const { id, name, createdDate, description } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
-                    const isNotHaveDescription = "Don't have any description";
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800 }}>
+                <Table>
+                  <UserListHead
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={data.length}
+                    numSelected={selected.length}
+                    onRequestSort={handleRequestSort}
+                    onSelectAllClick={handleSelectAllClick}
+                  />
+                  <TableBody>
+                    {data.map((row) => {
+                      // const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                      const { id, name, createdDate, description } = row;
+                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const isNotHaveDescription = "Don't have any description";
 
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            {/* <Avatar alt={name} src={avatarUrl} /> */}
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-                        <TableCell align="left">{(description && description) || isNotHaveDescription}</TableCell>
-                        <TableCell align="left">{fDate(createdDate)}</TableCell>
-                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                      return (
+                        <TableRow
+                          hover
+                          key={id}
+                          tabIndex={-1}
+                          role="checkbox"
+                          selected={isItemSelected}
+                          aria-checked={isItemSelected}
+                          onClick={() => navigate(`../category/detail/${id}`)}
+                          style={{cursor:'pointer'}}
+                        >
+                          <TableCell padding="checkbox">
+                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                          </TableCell>
+                          <TableCell component="th" scope="row" padding="none">
+                            <Stack direction="row" alignItems="center" spacing={2}>
+                              {/* <Avatar alt={name} src={avatarUrl} /> */}
+                              <Typography variant="subtitle2" noWrap>
+                                {name}
+                              </Typography>
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="left" sx={{width:700}}  onClick={handleTextClick}>{(description && (
+                            useEllipsis ? 
+                                <HTMLEllipsis
+                                  // innerRef={node => { linesEllipsis = node }}
+                                  component='article'
+                                  className='ellipsis-html'
+                                  unsafeHTML={description}
+                                  maxLine={1}
+                                  ellipsisHTML='<b>... read more</b>'
+                                />
+                             : 
+                              <article className='ellipsis-html' dangerouslySetInnerHTML={{ __html: description }} />
+                            
+                          )) || isNotHaveDescription}</TableCell>
+                          <TableCell align="left">{fDate(createdDate)}</TableCell>
+                          {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell> */}
 
-                        <TableCell align="right">
-                          <UserMoreMenu />
+                          <TableCell align="right">
+                            <UserMoreMenu />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                    {emptyRows > 0 && (
+                      <TableRow style={{ height: 53 * emptyRows }}>
+                        <TableCell colSpan={6} />
+                      </TableRow>
+                    )}
+                  </TableBody>
+
+                  {isUserNotFound && (
+                    <TableBody>
+                      <TableRow>
+                        <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                          <SearchNotFound searchQuery={filterName} />
                         </TableCell>
                       </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
+                    </TableBody>
                   )}
-                </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
 
-                {isUserNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={totalCount}
-            rowsPerPage={rowsPerPage}
-            page={page - 1}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Card>
-      </Container>
-    </Page>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={totalCount}
+              rowsPerPage={rowsPerPage}
+              page={page - 1}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Card>
+        </Container>
+      </Page>
+    </>
   );
 }

@@ -15,7 +15,8 @@ namespace NTEcommerce.WebAPI.AutoMapper
                 .ForMember(d => d.CategoryParent, opt => opt.MapFrom(s => s.ParentCategory ?? null));
 
             CreateMap<Category, CategoryDetailModel>()
-                .ForMember(d => d.Products, opt => opt.MapFrom(s => s.Products));
+                .ForMember(d => d.Products, opt => opt.MapFrom(s => s.Products))
+                .ForMember(d => d.CategoryParent, opt => opt.MapFrom(s => s.ParentCategory ?? null));
 
             CreateMap<CreateProductModel, Product>()
                 .ForMember(d => d.Images, opt => opt.Ignore());

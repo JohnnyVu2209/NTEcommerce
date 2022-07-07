@@ -1,4 +1,5 @@
 // routes
+import { ToastContainer } from 'react-toastify';
 import Router from './routes';
 // theme
 import ThemeProvider from './theme';
@@ -14,6 +15,7 @@ export default function App() {
       <ScrollToTop />
       <BaseOptionChartStyle />
       <Router />
+      
     </ThemeProvider>
   );
 }

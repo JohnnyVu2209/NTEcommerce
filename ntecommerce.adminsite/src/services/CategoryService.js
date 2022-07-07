@@ -7,8 +7,14 @@ const getListCategories = (PageNumber, PageSize, Name, OrderBy) => {
     return res;
 };
 
-const service = {
-    getListCategories
+const createCategory =  (data) => httpService.post(`${API_URL}/createCategory`,data);
+
+const getCategoryDetail =  (id) => httpService.get(`${API_URL}/getCategory/${id}`);
+
+const categoryService = {
+    getListCategories,
+    createCategory,
+    getCategoryDetail
 };
 
-export default service;
+export default categoryService;
