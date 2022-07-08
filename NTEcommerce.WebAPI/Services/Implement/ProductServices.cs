@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
+using System.Linq.Dynamic.Core;
 using NTEcommerce.SharedDataModel;
 using NTEcommerce.SharedDataModel.Product;
 using NTEcommerce.WebAPI.Constant;
@@ -8,7 +9,10 @@ using NTEcommerce.WebAPI.Exceptions;
 using NTEcommerce.WebAPI.Model;
 using NTEcommerce.WebAPI.Repository.Interface;
 using NTEcommerce.WebAPI.Services.Interface;
+using System.Reflection;
+using System.Text;
 using static NTEcommerce.WebAPI.Constant.MessageCode;
+using System.Linq;
 
 namespace NTEcommerce.WebAPI.Services.Implement
 {
@@ -17,6 +21,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
         private readonly IHostEnvironment environment;
+        private readonly ISortHelper<Product> sortHelper;
         private readonly ILogger<ProductServices> logger;
         private readonly IHttpContextAccessor httpContextAccessor;
         public ProductServices
@@ -24,6 +29,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 IMapper mapper,
                 IUnitOfWork unitOfWork,
                 IHostEnvironment environment,
+                ISortHelper<Product> sortHelper,
                 ILogger<ProductServices> logger,
                 IHttpContextAccessor httpContextAccessor
             )
@@ -31,6 +37,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
             this.mapper = mapper;
             this.logger = logger;
             this.unitOfWork = unitOfWork;
+            this.sortHelper = sortHelper;
             this.environment = environment;
             this.httpContextAccessor = httpContextAccessor;
         }
@@ -110,7 +117,10 @@ namespace NTEcommerce.WebAPI.Services.Implement
             var listImage = new List<string>();
             foreach (var image in productImages)
             {
-                var linkImg = String.Format($"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/Product/{image.Name}");
+                var linkImg = String.Format(
+                    $"{httpContextAccessor.HttpContext.Request.Scheme}://" +
+                    $"{httpContextAccessor.HttpContext.Request.Host}" +
+                    $"{httpContextAccessor.HttpContext.Request.PathBase}/Product/{image.Name}");
                 listImage.Add(linkImg);
             }
             return listImage;
@@ -120,16 +130,16 @@ namespace NTEcommerce.WebAPI.Services.Implement
         {
             var products = unitOfWork.Product.FindAll().Include(x => x.Reviews).Include(x => x.Images).Include(x => x.Category).AsQueryable();
 
-            if (products.Any() && !string.IsNullOrWhiteSpace(parameters.CategoryName))
-                products = products.Where(p => p.Category.Name.Contains(parameters.CategoryName));
+            if (products.Any() && !string.IsNullOrWhiteSpace(parameters.Name))
+                products = products.Where(p => p.Name.Contains(parameters.Name) || p.Category.Name.Contains(parameters.Name));
 
-            if (products.Any() && !string.IsNullOrWhiteSpace(parameters.ProductName))
-                products = products.Where(p => p.Name.Contains(parameters.ProductName));
+            var sortProduct = sortHelper.ApplySort(products, parameters.OrderBy);
 
-            return PagedList<Product, ProductModel>.ToPageList(products.OrderByDescending(p => p.UpdatedDate),
+            var productsModel = PagedList<Product, ProductModel>.ToPageList(sortProduct,
                                                                parameters.PageNumber,
                                                                parameters.PageSize,
                                                                mapper);
+            return productsModel;
         }
 
         public async Task<ProductDetailModel> GetProduct(Guid id)

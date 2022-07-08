@@ -18,13 +18,20 @@ namespace NTEcommerce.WebAPI.AutoMapper
                 .ForMember(d => d.Products, opt => opt.MapFrom(s => s.Products))
                 .ForMember(d => d.CategoryParent, opt => opt.MapFrom(s => s.ParentCategory ?? null));
 
+            CreateMap<Category, Category>()
+                .ForMember(d => d.Id, opt => opt.Ignore())
+                .ForMember(d => d.CreatedDate, opt => opt.Ignore())
+                .ForMember(d => d.TotalProducts, opt => opt.Ignore())
+                .ForMember(d => d.Products, opt => opt.Ignore())
+                ;
+
             CreateMap<CreateProductModel, Product>()
                 .ForMember(d => d.Images, opt => opt.Ignore());
 
             CreateMap<Product, ProductModel>()
                 .ForMember(d => d.Category, opt => opt.MapFrom(s  => s.Category != null ? s.Category.Name : null))
                 .ForMember(d => d.Images, opt => opt.MapFrom(s => s.Images != null ? s.Images.Select(x => x.Link) : null))
-                .ForMember(d => d.AvgRating, opt => opt.MapFrom(s => s.Reviews.Count != 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
+                .ForMember(d => d.AvgRating, opt => opt.MapFrom(s => s.Reviews.Count != 0 ? Math.Round(s.Reviews.Select(x => x.Rating).Average().Value,1) : 0));
             
             CreateMap<Product, ProductDetailModel>()
                 .ForMember(d => d.Category, opt => opt.MapFrom(s  => s.Category != null ? s.Category.Name : null))

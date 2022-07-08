@@ -9,7 +9,7 @@ namespace NTEcommerce.SharedDataModel.Product
 {
     public class AddProductReviewModel
     {
-        [Range(0, 10)]
+        [Range(0, 5)]
         public int Rating { get; set; }
         public string? Comment { get; set; }
     }

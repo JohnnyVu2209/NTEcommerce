@@ -13,6 +13,7 @@ import Register from './pages/Register';
 import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import CategoryDetail from './pages/Category/CategoryDetail';
+import ProductList from './pages/Product/ProductList';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ export default function Router() {
       children: [
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
-        { path: 'products', element: <Products /> },
+        { path: 'products', element: <ProductList /> },
         { path: 'blog', element: <Blog /> },
         {
           path: 'category',

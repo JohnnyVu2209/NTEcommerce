@@ -1,7 +1,7 @@
 import { filter } from 'lodash';
 import { useEffect, useState } from 'react';
 import { sentenceCase } from 'change-case';
-import { Link as RouterLink, Outlet, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import {
   Card,
   Table,
@@ -155,129 +155,127 @@ export default function Category() {
     setUseEllipsis(!useEllipsis);
   }
 
-  const emptyRows = page > 1 ? Math.max(0, page * rowsPerPage - totalCount) : 0;
-
   const filteredUsers = applySortFilter(data, getComparator(order, orderBy), filterName);
+
+  const emptyRows = page > 1 ? Math.max(0, page * rowsPerPage - totalCount) : 0;
 
   const isUserNotFound = data.length === 0;
 
   return (
-    <>
-      <Page title="Category">
-        <Container>
-          <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-            <Typography variant="h4" gutterBottom>
-              Category
-            </Typography>
-            <Button variant="contained" component={RouterLink} to="../category/create" startIcon={<Iconify icon="eva:plus-fill" />}>
-              New Category
-            </Button>
-          </Stack>
+    <Page title="Category">
+      <Container>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
+          <Typography variant="h4" gutterBottom>
+            Category
+          </Typography>
+          <Button variant="contained" component={RouterLink} to="../category/create" startIcon={<Iconify icon="eva:plus-fill" />}>
+            New Category
+          </Button>
+        </Stack>
 
-          <Card>
-            <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+        <Card>
+          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
 
-            <Scrollbar>
-              <TableContainer sx={{ minWidth: 800 }}>
-                <Table>
-                  <UserListHead
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={TABLE_HEAD}
-                    rowCount={data.length}
-                    numSelected={selected.length}
-                    onRequestSort={handleRequestSort}
-                    onSelectAllClick={handleSelectAllClick}
-                  />
-                  <TableBody>
-                    {data.map((row) => {
-                      // const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                      const { id, name, createdDate, description } = row;
-                      const isItemSelected = selected.indexOf(name) !== -1;
-                      const isNotHaveDescription = "Don't have any description";
+          <Scrollbar>
+            <TableContainer sx={{ minWidth: 800 }}>
+              <Table>
+                <UserListHead
+                  order={order}
+                  orderBy={orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={data.length}
+                  numSelected={selected.length}
+                  onRequestSort={handleRequestSort}
+                  onSelectAllClick={handleSelectAllClick}
+                />
+                <TableBody>
+                  {data.map((row) => {
+                    // const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, createdDate, description } = row;
+                    const isItemSelected = selected.indexOf(name) !== -1;
+                    const isNotHaveDescription = "Don't have any description";
 
-                      return (
-                        <TableRow
-                          hover
-                          key={id}
-                          tabIndex={-1}
-                          role="checkbox"
-                          selected={isItemSelected}
-                          aria-checked={isItemSelected}
-                          onClick={() => navigate(`../category/detail/${id}`)}
-                          style={{cursor:'pointer'}}
-                        >
-                          <TableCell padding="checkbox">
-                            <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
-                          </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
-                            <Stack direction="row" alignItems="center" spacing={2}>
-                              {/* <Avatar alt={name} src={avatarUrl} /> */}
-                              <Typography variant="subtitle2" noWrap>
-                                {name}
-                              </Typography>
-                            </Stack>
-                          </TableCell>
-                          <TableCell align="left" sx={{width:700}}  onClick={handleTextClick}>{(description && (
-                            useEllipsis ? 
-                                <HTMLEllipsis
-                                  // innerRef={node => { linesEllipsis = node }}
-                                  component='article'
-                                  className='ellipsis-html'
-                                  unsafeHTML={description}
-                                  maxLine={1}
-                                  ellipsisHTML='<b>... read more</b>'
-                                />
-                             : 
-                              <article className='ellipsis-html' dangerouslySetInnerHTML={{ __html: description }} />
-                            
-                          )) || isNotHaveDescription}</TableCell>
-                          <TableCell align="left">{fDate(createdDate)}</TableCell>
-                          {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                    return (
+                      <TableRow
+                        hover
+                        key={id}
+                        tabIndex={-1}
+                        role="checkbox"
+                        selected={isItemSelected}
+                        aria-checked={isItemSelected}
+                        onClick={() => navigate(`../category/detail/${id}`)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                        </TableCell>
+                        <TableCell component="th" scope="row" padding="none">
+                          <Stack direction="row" alignItems="center" spacing={2}>
+                            {/* <Avatar alt={name} src={avatarUrl} /> */}
+                            <Typography variant="subtitle2" noWrap>
+                              {name}
+                            </Typography>
+                          </Stack>
+                        </TableCell>
+                        <TableCell align="left" sx={{ width: 700 }} onClick={handleTextClick}>{(description && (
+                          useEllipsis ?
+                            <HTMLEllipsis
+                              // innerRef={node => { linesEllipsis = node }}
+                              component='article'
+                              className='ellipsis-html'
+                              unsafeHTML={description}
+                              maxLine={1}
+                              ellipsisHTML='<b>... read more</b>'
+                            />
+                            :
+                            <article className='ellipsis-html' dangerouslySetInnerHTML={{ __html: description }} />
+
+                        )) || isNotHaveDescription}</TableCell>
+                        <TableCell align="left">{fDate(createdDate)}</TableCell>
+                        {/* <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
                         <TableCell align="left">
                           <Label variant="ghost" color={(status === 'banned' && 'error') || 'success'}>
                             {sentenceCase(status)}
                           </Label>
                         </TableCell> */}
 
-                          <TableCell align="right">
-                            <UserMoreMenu />
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                    {emptyRows > 0 && (
-                      <TableRow style={{ height: 53 * emptyRows }}>
-                        <TableCell colSpan={6} />
-                      </TableRow>
-                    )}
-                  </TableBody>
-
-                  {isUserNotFound && (
-                    <TableBody>
-                      <TableRow>
-                        <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={filterName} />
+                        <TableCell align="right">
+                          <UserMoreMenu />
                         </TableCell>
                       </TableRow>
-                    </TableBody>
+                    );
+                  })}
+                  {emptyRows > 0 && (
+                    <TableRow style={{ height: 53 * emptyRows }}>
+                      <TableCell colSpan={6} />
+                    </TableRow>
                   )}
-                </Table>
-              </TableContainer>
-            </Scrollbar>
+                </TableBody>
 
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={totalCount}
-              rowsPerPage={rowsPerPage}
-              page={page - 1}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-          </Card>
-        </Container>
-      </Page>
-    </>
+                {isUserNotFound && (
+                  <TableBody>
+                    <TableRow>
+                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
+                        <SearchNotFound searchQuery={filterName} />
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                )}
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={totalCount}
+            rowsPerPage={rowsPerPage}
+            page={page - 1}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
+      </Container>
+    </Page>
   );
 }

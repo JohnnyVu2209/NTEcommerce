@@ -6,6 +6,7 @@ using NTEcommerce.SharedDataModel;
 using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Services.Interface;
+using static NTEcommerce.WebAPI.Constant.MessageCode;
 
 namespace NTEcommerce.WebAPI.Controllers
 {
@@ -45,6 +46,18 @@ namespace NTEcommerce.WebAPI.Controllers
         public async Task<IActionResult> GetCategory(Guid id)
         {
             return Ok(await categoryServices.GetCategory(id));
+        }
+
+        [HttpPut("updateCategory/{id}")]
+        public async Task<IActionResult> UpdateCategory(Guid id, UpdateCategoryModel updateCategory)
+        {
+            return Ok(await categoryServices.UpdateCategory(id, updateCategory));
+        }
+        [HttpDelete("deleteCategory/{id}")]
+        public async Task<IActionResult> DeleteCategory(Guid id)
+        {
+            await categoryServices.DeleteCategory(id);
+            return Ok(SuccessCode.DELETE_CATEGORY_SUCCESS);
         }
     }
 }

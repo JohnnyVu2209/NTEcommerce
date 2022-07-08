@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NTEcommerce.WebAPI.DBContext;
 using NTEcommerce.WebAPI.Middleware;
+using NTEcommerce.WebAPI.Model;
 using NTEcommerce.WebAPI.Model.Identity;
 using NTEcommerce.WebAPI.Repository.Implementation;
 using NTEcommerce.WebAPI.Repository.Interface;
@@ -52,6 +53,9 @@ builder.Services.AddIdentity<User, Role>(options =>
 //Add services
 builder.Services.AddTransient<ICategoryServices, CategoryServices>();
 builder.Services.AddTransient<IProductServices, ProductServices>();
+
+builder.Services.AddScoped<ISortHelper<Product>, SortHelper<Product>>();
+builder.Services.AddScoped<ISortHelper<Category>, SortHelper<Category>>();
 //Add unit of work
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
 //Add exception middleware

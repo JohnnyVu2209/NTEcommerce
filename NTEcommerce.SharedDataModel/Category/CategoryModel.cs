@@ -13,5 +13,6 @@ namespace NTEcommerce.SharedDataModel.Category
         public string? Description { get; set; }
         public CategoryModel? CategoryParent { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

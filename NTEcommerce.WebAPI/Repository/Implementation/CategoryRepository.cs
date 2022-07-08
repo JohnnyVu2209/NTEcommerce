@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NTEcommerce.WebAPI.DBContext;
 using NTEcommerce.WebAPI.Model;
 using NTEcommerce.WebAPI.Repository.Interface;
+using NTEcommerce.WebAPI.Services.Interface;
 
 namespace NTEcommerce.WebAPI.Repository.Implementation
 {
@@ -10,6 +11,7 @@ namespace NTEcommerce.WebAPI.Repository.Implementation
     {
         public CategoryRepository(EcommerceDbContext context) : base(context)
         {
+            
         }
 
         public async Task<bool> CheckExistName(string name)

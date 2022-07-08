@@ -18,6 +18,6 @@ namespace NTEcommerce.SharedDataModel
             } 
         }
 
-        public string OrderBy { get; set; } 
+        public string? OrderBy { get; set; } = "UpdatedDate desc";
     }
 }

@@ -62,14 +62,6 @@ namespace NTEcommerce.WebAPI.Services.Implement
         {
             var categoryList = unitOfWork.Category.FindAll().Include(x => x.ParentCategory).Include(x => x.Categories).Include(c => c.Products).AsQueryable();
 
-            // var counts = new Dictionary<Category, int>();
-            // foreach (var category in categoryList.ToList())
-            // {
-            //     category.TotalProducts = TotalProducts(category);
-            //     unitOfWork.Category.Update(category);
-            // }
-            // await unitOfWork.SaveAsync();
-
             if (categoryList.Any() && !string.IsNullOrWhiteSpace(parameters.Name))
                 categoryList = categoryList.Where(x => x.Name.Contains(parameters.Name));
 
@@ -90,8 +82,6 @@ namespace NTEcommerce.WebAPI.Services.Implement
             }
             return totalProducts;
 
-            //OR
-            //return category.Questions.Count + category.Categories.Sum(innerCategory => TotalQuestions(innerCategory));
         }
 
         private void ApplySort(ref IQueryable<Category> categories, string orderByQueryString)
@@ -133,6 +123,41 @@ namespace NTEcommerce.WebAPI.Services.Implement
             }
 
             categories = categories.OrderBy(orderQuery);
+        }
+
+        public async Task<CategoryDetailModel> UpdateCategory(Guid id, UpdateCategoryModel updateCategoryModel)
+        {
+            var category = await unitOfWork.Category.FindByIdAsync(id);
+
+            if (category == null)
+                throw new NotFoundException(ErrorCode.CATEGORY_NOT_FOUNDED);
+
+            var updateCategory = mapper.Map<Category>(updateCategoryModel);
+
+            if (updateCategoryModel.ParentId != null)
+            {
+                var categoryParent = await unitOfWork.Category.GetById((Guid)updateCategoryModel.ParentId);
+                if (categoryParent == null)
+                    throw new BadRequestException(ErrorCode.CATEGORY_NOT_FOUNDED);
+
+                category.ParentCategory = categoryParent;
+            }
+
+            mapper.Map(updateCategory, category);
+
+            unitOfWork.Category.Update(category);
+
+            await unitOfWork.SaveAsync();
+
+            var categoryModel = mapper.Map<CategoryDetailModel>(category);
+
+            return categoryModel;
+
+        }
+
+        public Task DeleteCategory(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

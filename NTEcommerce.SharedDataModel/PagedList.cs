@@ -38,7 +38,6 @@ namespace NTEcommerce.SharedDataModel
             var count = source.Count();
             var items = source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
             var itemT2 = mapper.Map<List<T2>>(items);
-
             return new PagedList<T1, T2>(itemT2, count, pageNumber, pageSize);
         }
 
