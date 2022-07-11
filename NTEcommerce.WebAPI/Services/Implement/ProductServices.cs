@@ -74,7 +74,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 await unitOfWork.Product.AddAsync(newProduct);
                 await unitOfWork.SaveAsync();
 
-                if(newProduct.Images.Count != 0)
+                if(newProduct.Images != null && newProduct.Images.Count != 0)
                 {
                      await SaveImages(productModel.Images);
                 }

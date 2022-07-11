@@ -14,6 +14,8 @@ import Products from './pages/Products';
 import DashboardApp from './pages/DashboardApp';
 import CategoryDetail from './pages/Category/CategoryDetail';
 import ProductList from './pages/Product/ProductList';
+import CreateProduct from './pages/Product/CreateProduct';
+import ProductDetail from './pages/Product/ProductDetail';
 
 // ----------------------------------------------------------------------
 
@@ -26,6 +28,8 @@ export default function Router() {
         { path: 'app', element: <DashboardApp /> },
         { path: 'user', element: <User /> },
         { path: 'products', element: <ProductList /> },
+        { path: 'products/create', element: <CreateProduct /> },
+        { path: 'products/detail/:id', element: <ProductDetail /> },
         { path: 'blog', element: <Blog /> },
         {
           path: 'category',

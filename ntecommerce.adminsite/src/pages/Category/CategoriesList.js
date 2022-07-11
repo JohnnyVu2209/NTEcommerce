@@ -203,13 +203,16 @@ export default function Category() {
                         role="checkbox"
                         selected={isItemSelected}
                         aria-checked={isItemSelected}
-                        onClick={() => navigate(`../category/detail/${id}`)}
-                        style={{ cursor: 'pointer' }}
+                        
+                        
                       >
                         <TableCell padding="checkbox">
                           <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                         </TableCell>
-                        <TableCell component="th" scope="row" padding="none">
+                        <TableCell component="th" scope="row" padding="none"
+                          onClick={() => navigate(`../category/detail/${id}`)}
+                          style={{ cursor: 'pointer' }}
+                        >
                           <Stack direction="row" alignItems="center" spacing={2}>
                             {/* <Avatar alt={name} src={avatarUrl} /> */}
                             <Typography variant="subtitle2" noWrap>

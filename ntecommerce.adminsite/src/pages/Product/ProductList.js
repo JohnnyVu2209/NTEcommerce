@@ -112,7 +112,7 @@ export default function ProductList() {
                     <Typography variant="h4" gutterBottom>
                         Product
                     </Typography>
-                    <Button variant="contained" component={RouterLink} to="../product/create" startIcon={<Iconify icon="eva:plus-fill" />}>
+                    <Button variant="contained" component={RouterLink} to="../products/create" startIcon={<Iconify icon="eva:plus-fill" />}>
                         New Product
                     </Button>
                 </Stack>
@@ -146,7 +146,6 @@ export default function ProductList() {
                                             updatedDate,
                                         } = row;
                                         const isItemSelected = selected.indexOf(name) !== -1;
-                                        const isNotHaveDescription = "Don't have any description";
 
                                         return (
                                             <TableRow
@@ -156,13 +155,13 @@ export default function ProductList() {
                                                 role="checkbox"
                                                 selected={isItemSelected}
                                                 aria-checked={isItemSelected}
-                                                onClick={() => navigate(`../product/detail/${id}`)}
-                                                style={{ cursor: 'pointer' }}
                                             >
                                                 <TableCell padding="checkbox">
                                                     <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
                                                 </TableCell>
-                                                <TableCell component="th" scope="row" padding="none">
+                                                <TableCell component="th" scope="row" padding="none" 
+                                                onClick={() => navigate(`../products/detail/${id}`)}
+                                                style={{ cursor: 'pointer' }}>
                                                     <Stack direction="row" alignItems="center" spacing={2}>
                                                         {/* <Avatar alt={name} src={avatarUrl} /> */}
                                                         <Typography variant="subtitle2" noWrap>
