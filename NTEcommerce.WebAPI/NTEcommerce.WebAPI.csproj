@@ -24,7 +24,7 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Identity.Web" Version="1.16.0"/>
 		<PackageReference Include="Microsoft.Identity.Web.UI" Version="1.16.0"/>
-		<PackageReference Include="Newtonsoft.Json" Version="9.0.1"/>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
 		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.19"/>
 	</ItemGroup>
