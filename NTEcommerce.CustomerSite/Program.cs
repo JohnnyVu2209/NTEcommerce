@@ -1,4 +1,5 @@
 using NTEcommerce.CustomerSite.Models;
+using NTEcommerce.CustomerSite.Services;
 using Refit;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,7 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
+/*builder.Services.AddRefitClient<IProductService>().ConfigureHttpClient(c =>
+{
+    c.BaseAddress = new Uri("https://localhost:7012/api");
+});
+*/
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,6 +31,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
 app.Run();
