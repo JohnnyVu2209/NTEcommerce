@@ -16,6 +16,7 @@ import CategoryDetail from './pages/Category/CategoryDetail';
 import ProductList from './pages/Product/ProductList';
 import CreateProduct from './pages/Product/CreateProduct';
 import ProductDetail from './pages/Product/ProductDetail';
+import EditProduct from './pages/Product/EditProduct';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ export default function Router() {
         { path: 'products', element: <ProductList /> },
         { path: 'products/create', element: <CreateProduct /> },
         { path: 'products/detail/:id', element: <ProductDetail /> },
+        { path: 'products/edit/:id', element: <EditProduct /> },
         { path: 'blog', element: <Blog /> },
         {
           path: 'category',

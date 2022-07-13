@@ -63,20 +63,20 @@ namespace NTEcommerce.WebAPI.Services.Implement
                     newProduct.Images = productImages;
                 }
 
-                if(productModel.CategoryId != null)
+                if (productModel.CategoryId != null)
                 {
                     var category = await unitOfWork.Category.GetById((Guid)productModel.CategoryId);
                     if (category == null)
                         throw new BadRequestException(ErrorCode.CATEGORY_NOT_FOUNDED);
                     newProduct.Category = category;
-                }    
+                }
 
                 await unitOfWork.Product.AddAsync(newProduct);
                 await unitOfWork.SaveAsync();
 
-                if(newProduct.Images != null && newProduct.Images.Count != 0)
+                if (newProduct.Images != null && newProduct.Images.Count != 0)
                 {
-                     await SaveImages(productModel.Images);
+                    await SaveImages(productModel.Images);
                 }
 
                 var newProductModel = mapper.Map<ProductModel>(newProduct);
@@ -92,6 +92,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
         private async Task<List<string>> SaveImages(List<IFormFile> images)
         {
+
             var rootPath = Path.Combine(environment.ContentRootPath, "Resource", "ProductImages");
 
             if (!Directory.Exists(rootPath))
@@ -101,13 +102,15 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
             foreach (var image in images)
             {
-                var imgPath = Path.Combine(rootPath, image.FileName);
+                var myUniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+
+                var imgPath = Path.Combine(rootPath, myUniqueFileName);
 
                 using (var stream = new FileStream(imgPath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
-                listImageName.Add(image.FileName);
+                listImageName.Add(myUniqueFileName);
             }
             return listImageName;
         }
@@ -164,6 +167,99 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
             var productModel = mapper.Map<ProductDetailModel>(product);
             return productModel;
+        }
+
+        public async Task<ProductDetailModel?> UpdateProduct(Guid productId, UpdateProductModel updateProductModel)
+        {
+            var product = await unitOfWork.Product.FindById(productId);
+
+            if (product == null)
+                throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUNDED);
+
+            var updateProduct = mapper.Map<Product>(updateProductModel);
+
+            mapper.Map(updateProduct, product);
+
+            if (updateProductModel.ImageLink != null && updateProductModel.ImageLink.Count != 0)
+            {
+                var deleteFile = FindMissing(product.Images.Select(x => x.Name).ToList(), updateProductModel.ImageLink.Select(x => x.Name).ToList());
+                if (deleteFile.Count != 0)
+                {
+                    foreach (var item in deleteFile)
+                    {
+                        DeleteDoc(item);
+                        product.Images.Remove(product.Images.Single(i => i.Name == item));
+                    }
+                }
+            }
+            else if (product.Images.Count != 0)
+            {
+                foreach (var item in product.Images)
+                {
+                    DeleteDoc(item.Name);
+                    product.Images.Remove(item);
+                }
+            }
+
+            if (updateProductModel.Images != null && updateProductModel.Images.Count != 0)
+            {
+                var imageName = updateProductModel.Images.Select(x => x.FileName).ToList();
+                foreach (var image in imageName)
+                {
+                    product.Images.Add(new ProductImage
+                    {
+                        Name = image,
+                        Link = String.Format($"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/Product/{image}")
+                    });
+                }
+            }
+
+            if(updateProductModel.CategoryId != null)
+            {
+                var category = await unitOfWork.Category.GetById((Guid)updateProductModel.CategoryId);
+
+                if(category == null)
+                   throw new NotFoundException(ErrorCode.CATEGORY_NOT_FOUNDED);
+
+                product.Category = category;
+
+            }
+
+            unitOfWork.Product.Update(product);
+            await unitOfWork.SaveAsync();
+
+            if (updateProductModel.Images != null && updateProductModel.Images.Count != 0)
+            {
+                await SaveImages(updateProductModel.Images);
+            }
+
+            var productModel = mapper.Map<ProductDetailModel>(product);
+            return productModel;
+
+
+        }
+        List<string> FindMissing(List<string> a, List<string> b)
+        {
+            var missingList = new List<string>();
+            for (int i = 0; i < a.Count; i++)
+            {
+                int j;
+
+                for (j = 0; j < b.Count; j++)
+                    if (a[i] == b[j])
+                        break;
+
+                if (j == b.Count)
+                    missingList.Add(a[i]);
+            }
+            return missingList;
+        }
+
+        public void DeleteDoc(string fileName)
+        {
+            var filePath = Path.Combine(environment.ContentRootPath, "Resources", "ProductImages", fileName);
+            if (File.Exists(filePath))
+                System.IO.File.Delete(filePath);
         }
     }
 }

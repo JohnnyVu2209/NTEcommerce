@@ -122,20 +122,7 @@ export default function CreateProduct() {
           toast.error(ErrorCode[err]);
         else
           toast.error("Create failed");
-      })
-    // dispatch(createCategory(data))
-    // .unwrap()
-    // .then(() => {
-    //   toast.success(SuccessCode.CREATE_CATEGORY_SUCCESS);
-    //   navigate('/dashboard/category', { replace: true });
-    // })
-    // .catch((err) => {
-    //   if(ErrorCode[err])
-    //     toast.error(ErrorCode[err]);
-    //   else
-    //     toast.error(ErrorCode.ERR_CREATE_CATEGORY_FAILED);
-    // })
-    // ;
+      });
   };
 
   const handleRemoveImg = (name) => {
@@ -193,10 +180,13 @@ export default function CreateProduct() {
                 ))}
               </Select>
             </FormControl>
-            <CurrencyFormat customInput={RHFTextField} thousandSeparator prefix="đ" {...register("price")} onValueChange={(values) => {
-              const { value } = values;
-              setValue("price", value);
-            }} />
+            <CurrencyFormat
+              customInput={RHFTextField}
+              thousandSeparator prefix="đ"
+              {...register("price")} onValueChange={(values) => {
+                const { value } = values;
+                setValue("price", value);
+              }} />
 
             <ReactQuill
               theme="snow"
@@ -259,8 +249,6 @@ export default function CreateProduct() {
                 Upload
               </Button>
             </label>
-            {console.log(getValues('images'))}
-            {console.log(previewImages)}
             <ImageList sx={{ width: "100%", height: 500 }} cols={3} rowHeight={200}>
               {previewImages.length > 0 && previewImages.map(item => (
                 <ImageListItem key={item.name} style={{ padding: 5 }}>

@@ -8,14 +8,15 @@ using System.Threading.Tasks;
 
 namespace NTEcommerce.SharedDataModel.Product
 {
-    public class CreateProductModel
+    public class UpdateProductModel
     {
-        [Required(ErrorMessage ="Product name is required")]
+        [Required(ErrorMessage = "Product name is required")]
         public string? Name { get; set; }
         public string? Price { get; set; }
         public string? Description { get; set; }
-        [Required(ErrorMessage ="Product price is required")]
+        [Required(ErrorMessage = "Product price is required")]
         public Guid? CategoryId { get; set; }
+        public List<ProductImageModel> ImageLink { get; set; }
         public List<IFormFile>? Images { get; set; }
     }
 }

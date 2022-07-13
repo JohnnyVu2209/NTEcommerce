@@ -8,5 +8,8 @@ namespace NTEcommerce.WebAPI.Model.Identity
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public bool IsDeleted { get; set; }
+
+        public Guid CartId { get; set; }
+        public virtual ShoppingCart Cart { get; set; }
     }
 }

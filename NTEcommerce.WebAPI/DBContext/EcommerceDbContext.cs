@@ -21,6 +21,8 @@ namespace NTEcommerce.WebAPI.DBContext
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductImage> Images { get; set; }
         public DbSet<ProductReview> Reviews { get; set; }
+        public DbSet<ShoppingCart> Carts { get; set; }
+        public DbSet<ShoppingCartItem> CartItems { get; set; }
 
         public override int SaveChanges()
         {
@@ -133,11 +135,15 @@ namespace NTEcommerce.WebAPI.DBContext
             {
                 entity.ToTable(name: "User");
                 entity.HasData(admin);
+                entity.HasOne(c => c.Cart)
+                .WithOne(u => u.User)
+                .HasForeignKey<ShoppingCart>(f => f.UserId);
             });
             builder.Entity<Role>(entity =>
             {
                 entity.ToTable(name: "Role");
                 entity.HasData(adminRole);
+                
             });
             builder.Entity<IdentityUserRole<Guid>>(entity =>
             {

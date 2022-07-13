@@ -70,7 +70,7 @@ export default function ProductDetail() {
                                         Category:
                                     </Typography>
                                     <Typography variant="body1" style={{ paddingLeft: 10 }}>
-                                        {product.category ? product.category : "uncategory"}
+                                        {product.category ? product.category.name : "uncategory"}
                                     </Typography>
                                 </Stack>
                             </Grid>

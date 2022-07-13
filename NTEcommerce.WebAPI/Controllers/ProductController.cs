@@ -43,6 +43,11 @@ namespace NTEcommerce.WebAPI.Controllers
         {
             return Ok(await productServices.CreateProduct(productModel));
         }
+        [HttpPut("updateProduct/{id}")]
+        public async Task<IActionResult> UpdateProduct(Guid id,[FromForm] UpdateProductModel productModel)
+        {
+            return Ok(await productServices.UpdateProduct(id,productModel));
+        }
         [HttpPost("addReview/{ProductId}")]
         public async Task<IActionResult> AddReview(Guid ProductId,[FromBody] AddProductReviewModel reviewModel)
         {

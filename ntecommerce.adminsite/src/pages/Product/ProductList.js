@@ -176,7 +176,7 @@ export default function ProductList() {
                                                 <TableCell align="left">{fDate(updatedDate)}</TableCell>
 
                                                 <TableCell align="right">
-                                                    <UserMoreMenu />
+                                                    <UserMoreMenu component="products" id={id}/>
                                                 </TableCell>
                                             </TableRow>
                                         );
