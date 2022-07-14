@@ -10,11 +10,12 @@ import App from './App';
 import{ store }from './features/store';
 import * as serviceWorker from './serviceWorker';
 import reportWebVitals from './reportWebVitals';
+import setupInterceptors from "./httpService/setupInterceptor";
 
 // ----------------------------------------------------------------------
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
+setupInterceptors(store);
 root.render(
   <Provider store={store}>
     <HelmetProvider>

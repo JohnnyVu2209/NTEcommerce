@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NTEcommerce.SharedDataModel;
+using NTEcommerce.SharedDataModel.User;
 using NTEcommerce.WebAPI.Model.Identity;
 using NTEcommerce.WebAPI.Repository.Interface;
 using System.IdentityModel.Tokens.Jwt;
@@ -18,12 +21,16 @@ namespace NTEcommerce.WebAPI.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<AuthenticationController> _logger;
+        private readonly IMapper _mapper;
         public AuthenticationController(
             UserManager<User> userManager,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IMapper mapper)
         {
             _userManager = userManager;
             _configuration = configuration;
+            _mapper = mapper;
         }
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
@@ -51,6 +58,19 @@ namespace NTEcommerce.WebAPI.Controllers
             }
             return Unauthorized(ErrorCode.USERNAME_OR_PASSWORD_NOT_CORRECT);
 
+        }
+        [HttpGet("GetUserInfo/{username}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUser(string username)
+        {
+            var user = await _userManager.FindByNameAsync(username);
+
+            if(user == null)
+                return NotFound(ErrorCode.USER_NOT_FOUND);
+
+            var userDto = _mapper.Map<UserDetailModel>(user);
+
+            return Ok(userDto);
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)

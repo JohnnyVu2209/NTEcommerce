@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef, useState } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@mui/material';
@@ -7,6 +8,7 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton } from '@
 import MenuPopover from '../../components/MenuPopover';
 // mocks_
 import account from '../../_mock/account';
+import { logout } from '../../features/AuthSlice';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +33,12 @@ const MENU_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const { isAuth } = useSelector((state) => state.auth);
+
   const anchorRef = useRef(null);
 
   const [open, setOpen] = useState(null);
@@ -42,6 +50,16 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  useEffect(() => {
+    if (!isAuth)
+      navigate('/login', { replace: true })
+  }, [isAuth]);
+
+
+  const handleLogout = () => {
+    dispatch(logout());
+  }
 
   return (
     <>
@@ -101,7 +119,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={handleLogout} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

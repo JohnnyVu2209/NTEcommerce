@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using NTEcommerce.SharedDataModel.Category;
 using NTEcommerce.SharedDataModel.Product;
+using NTEcommerce.SharedDataModel.User;
 using NTEcommerce.WebAPI.Model;
+using NTEcommerce.WebAPI.Model.Identity;
 
 namespace NTEcommerce.WebAPI.AutoMapper
 {
@@ -9,6 +11,8 @@ namespace NTEcommerce.WebAPI.AutoMapper
     {
         public MappingProfile()
         {
+            CreateMap<User, UserDetailModel>();
+
             CreateMap<CreateCategoryModel, Category>();
 
             CreateMap<Category, CategorySimpleModel>();
