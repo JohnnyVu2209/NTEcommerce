@@ -1,5 +1,6 @@
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
-import HTMLEllipsis from "react-lines-ellipsis/lib/html";
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Button, Card, Checkbox, Container, Stack, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 
@@ -10,6 +11,8 @@ import Scrollbar from "../../components/Scrollbar";
 import { fDate } from "../../utils/formatTime";
 import SearchNotFound from "../../components/SearchNotFound";
 import { UserListHead, UserListToolbar, UserMoreMenu } from "../../sections/@dashboard/user";
+import { deleteProduct } from "../../features/productSlice";
+import { ErrorCode } from "../../constant/ErrorCode";
 
 //----------------------------------------
 const TABLE_HEAD = [
@@ -24,6 +27,8 @@ const TABLE_HEAD = [
 
 export default function ProductList() {
     const navigate = useNavigate();
+
+    const dispatch = useDispatch();
 
     const [data, setData] = useState([]);
 
@@ -44,24 +49,29 @@ export default function ProductList() {
     const [useEllipsis, setUseEllipsis] = useState(true);
 
     useEffect(() => {
-        productService.getProductList(page, rowsPerPage, `${orderBy} ${order}`, filterName).
-            then(response => {
-                setData(response.data);
-                const { TotalCount } = JSON.parse(response.headers.pagination);
-                setTotalCount(TotalCount);
-            });
+        fetchData();
     }, [page, rowsPerPage, orderBy, order, filterName]);
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = data.map((n) => n.name);
+            const newSelecteds = data.map((n) => n.id);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
+    const fetchData = () => {
+        productService.getProductList(page, rowsPerPage, `${orderBy} ${order}`, filterName).
+            then(response => {
+                setData(response.data);
+                const { TotalCount } = JSON.parse(response.headers.pagination);
+                setTotalCount(TotalCount);
+            });
+    }
+
     const handleClick = (event, name) => {
+        console.log(name)
         const selectedIndex = selected.indexOf(name);
         let newSelected = [];
         if (selectedIndex === -1) {
@@ -101,6 +111,28 @@ export default function ProductList() {
         setUseEllipsis(!useEllipsis);
     }
 
+    const handleDelete = () => {
+        selected.forEach(id => deleteAction(id));
+    }
+
+    const handleDeleteWithId = (id) => {
+        deleteAction(id);
+    }
+
+    const deleteAction = (id) => {
+        dispatch(deleteProduct(id)).unwrap()
+            .then(() => {
+                toast.success("Delete product successfully");
+                fetchData();
+            })
+            .catch((err) => {
+                if (ErrorCode[err])
+                    toast.error(ErrorCode[err]);
+                else
+                    toast.error("Delete failed");
+            })
+    }
+
     const emptyRows = page > 1 ? Math.max(0, page * rowsPerPage - totalCount) : 0;
 
     const isUserNotFound = data.length === 0;
@@ -117,7 +149,7 @@ export default function ProductList() {
                     </Button>
                 </Stack>
                 <Card>
-                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} onDeleteClick={handleDelete} />
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
                             <Table>
@@ -145,7 +177,7 @@ export default function ProductList() {
                                             createdDate,
                                             updatedDate,
                                         } = row;
-                                        const isItemSelected = selected.indexOf(name) !== -1;
+                                        const isItemSelected = selected.indexOf(id) !== -1;
 
                                         return (
                                             <TableRow
@@ -157,11 +189,11 @@ export default function ProductList() {
                                                 aria-checked={isItemSelected}
                                             >
                                                 <TableCell padding="checkbox">
-                                                    <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, name)} />
+                                                    <Checkbox checked={isItemSelected} onChange={(event) => handleClick(event, id)} />
                                                 </TableCell>
-                                                <TableCell component="th" scope="row" padding="none" 
-                                                onClick={() => navigate(`../products/detail/${id}`)}
-                                                style={{ cursor: 'pointer' }}>
+                                                <TableCell component="th" scope="row" padding="none"
+                                                    onClick={() => navigate(`../products/detail/${id}`)}
+                                                    style={{ cursor: 'pointer' }}>
                                                     <Stack direction="row" alignItems="center" spacing={2}>
                                                         {/* <Avatar alt={name} src={avatarUrl} /> */}
                                                         <Typography variant="subtitle2" noWrap>
@@ -169,14 +201,14 @@ export default function ProductList() {
                                                         </Typography>
                                                     </Stack>
                                                 </TableCell>
-                                                <TableCell align="left">{new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'VND' }).format(price) }</TableCell>
+                                                <TableCell align="left">{new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'VND' }).format(price)}</TableCell>
                                                 <TableCell align="left">{quantity}</TableCell>
                                                 <TableCell align="left">{avgRating}</TableCell>
                                                 <TableCell align="left">{fDate(createdDate)}</TableCell>
                                                 <TableCell align="left">{fDate(updatedDate)}</TableCell>
 
                                                 <TableCell align="right">
-                                                    <UserMoreMenu component="products" id={id}/>
+                                                    <UserMoreMenu component="products" id={id} onDeleteClick={() => handleDeleteWithId(id)} />
                                                 </TableCell>
                                             </TableRow>
                                         );

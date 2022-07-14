@@ -10,11 +10,14 @@ const createProduct = (data) => httpService.postForm(`${API_URL}/createProduct`,
 
 const updateProduct = (id,data) => httpService.putForm(`${API_URL}/updateProduct/${id}`,data);
 
+const deleteProduct = (id) => httpService.del(`${API_URL}/deleteProduct/${id}`);
+
 const productService = {
     getProductList,
     getProduct,
     createProduct,
-    updateProduct
+    updateProduct,
+    deleteProduct
 }
 
 export default productService;

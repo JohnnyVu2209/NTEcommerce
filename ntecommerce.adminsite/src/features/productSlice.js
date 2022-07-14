@@ -37,6 +37,18 @@ export const updateProduct = createAsyncThunk("product/update",async({id,data}, 
     }
 })
 
+export const deleteProduct = createAsyncThunk("product/delete",async (id,{rejectWithValue}) => {
+    try {
+        await productService.deleteProduct(id);
+        return id;
+    } catch (error) {
+        if (!error.response) {
+            throw error
+        }
+        return rejectWithValue(error.response.data.Message);
+    }
+})
+
 const initialState = { product: {} }
 
 const productSlice = createSlice({
