@@ -13,6 +13,7 @@ using System.Reflection;
 using System.Text;
 using static NTEcommerce.WebAPI.Constant.MessageCode;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace NTEcommerce.WebAPI.Services.Implement
 {
@@ -180,15 +181,19 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
             mapper.Map(updateProduct, product);
 
-            if (updateProductModel.ImageLink != null && updateProductModel.ImageLink.Count != 0)
+            if (updateProductModel.ImageLink != null)
             {
-                var deleteFile = FindMissing(product.Images.Select(x => x.Name).ToList(), updateProductModel.ImageLink.Select(x => x.Name).ToList());
-                if (deleteFile.Count != 0)
+                var updateImage = JsonConvert.DeserializeObject<List<ProductImageModel>>(updateProductModel.ImageLink);
+                if (updateImage.Count > 0)
                 {
-                    foreach (var item in deleteFile)
+                    var deleteFile = FindMissing(product.Images.Select(x => x.Name).ToList(), updateImage.Select(x => x.Name).ToList());
+                    if (deleteFile.Count != 0)
                     {
-                        DeleteDoc(item);
-                        product.Images.Remove(product.Images.Single(i => i.Name == item));
+                        foreach (var item in deleteFile)
+                        {
+                            DeleteDoc(item);
+                            product.Images.Remove(product.Images.Single(i => i.Name == item));
+                        }
                     }
                 }
             }
@@ -214,12 +219,12 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 }
             }
 
-            if(updateProductModel.CategoryId != null)
+            if (updateProductModel.CategoryId != null)
             {
                 var category = await unitOfWork.Category.GetById((Guid)updateProductModel.CategoryId);
 
-                if(category == null)
-                   throw new NotFoundException(ErrorCode.CATEGORY_NOT_FOUNDED);
+                if (category == null)
+                    throw new NotFoundException(ErrorCode.CATEGORY_NOT_FOUNDED);
 
                 product.Category = category;
 
@@ -260,6 +265,19 @@ namespace NTEcommerce.WebAPI.Services.Implement
             var filePath = Path.Combine(environment.ContentRootPath, "Resources", "ProductImages", fileName);
             if (File.Exists(filePath))
                 System.IO.File.Delete(filePath);
+        }
+
+        public async Task DeleteProduct(Guid id)
+        {
+            var product = await unitOfWork.Product.FindById(id);
+
+            if (product == null)
+                throw new NotFoundException(ErrorCode.PRODUCT_NOT_FOUNDED);
+
+            product.IsDeleted = true;
+
+            unitOfWork.Product.Update(product);
+            await unitOfWork.SaveAsync();
         }
     }
 }

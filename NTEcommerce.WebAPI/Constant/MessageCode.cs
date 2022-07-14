@@ -5,6 +5,7 @@
         public static class SuccessCode
         {
             public static string DELETE_CATEGORY_SUCCESS = "DELETE_CATEGORY_SUCCESSFULLY";
+            public static string DELETE_PRODUCT_SUCCESS = "DELETE_PRODUCT_SUCCESSFULLY";
         }
         public static class ErrorCode
         {

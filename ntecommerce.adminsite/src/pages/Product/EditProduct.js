@@ -132,6 +132,14 @@ export default function EditProduct() {
                 body.append("Images", images[index]);
             }
         }
+        // console.log(getValues('imageLink'));
+        if(getValues('imageLink') && getValues('imageLink').length > 0){
+            const imagesLink = [...getValues('imageLink')];
+            body.append('ImageLink', JSON.stringify(imagesLink));
+            // for (let index = 0; index < imagesLink.length; index++) {
+            //     body.append('ImageLink', imagesLink[index]);
+            // }
+        }
         dispatch(updateProduct({id,data: body})).unwrap()
             .then(() => {
                 toast.success("Update successfully");

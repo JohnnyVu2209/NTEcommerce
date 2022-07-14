@@ -176,7 +176,11 @@ namespace NTEcommerce.WebAPI.DBContext
                 entity.HasIndex(x => x.Name)
                 .IsUnique();
             });
-            base.OnModelCreating(builder);
+            builder.Entity<Product>(entity =>
+            {
+                entity.HasQueryFilter(p => !p.IsDeleted);
+            });
+                base.OnModelCreating(builder);
         }
     }
 }

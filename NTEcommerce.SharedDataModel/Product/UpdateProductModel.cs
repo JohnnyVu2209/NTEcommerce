@@ -16,7 +16,7 @@ namespace NTEcommerce.SharedDataModel.Product
         public string? Description { get; set; }
         [Required(ErrorMessage = "Product price is required")]
         public Guid? CategoryId { get; set; }
-        public List<ProductImageModel> ImageLink { get; set; }
+        public string ImageLink { get; set; }
         public List<IFormFile>? Images { get; set; }
     }
 }

@@ -12,5 +12,6 @@ namespace NTEcommerce.WebAPI.Services.Interface
         Task<ProductDetailModel> GetProduct(Guid id);
         Task<ProductDetailModel?> AddReview(Guid productId, AddProductReviewModel reviewModel);
         Task<ProductDetailModel?> UpdateProduct(Guid productId, UpdateProductModel product);
+        Task DeleteProduct(Guid id);
     }
 }

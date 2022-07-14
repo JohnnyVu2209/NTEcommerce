@@ -49,7 +49,7 @@ export default function ProductDetail() {
                             <Grid item xs={12}>
                                 <Carousel autoPlay swipe>
                                     {product.images && product.images.length > 0 && product.images.map((item, i) => (
-                                        <img alt="images" src={item} key={i} />
+                                        <img alt={item.name} src={item.link} key={i} />
                                     )
                                     )}
                                 </Carousel>

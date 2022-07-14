@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using NTEcommerce.SharedDataModel.Product;
 using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Services.Interface;
+using static NTEcommerce.WebAPI.Constant.MessageCode;
 
 namespace NTEcommerce.WebAPI.Controllers
 {
@@ -48,6 +49,13 @@ namespace NTEcommerce.WebAPI.Controllers
         {
             return Ok(await productServices.UpdateProduct(id,productModel));
         }
+        [HttpDelete("deleteProduct/{id}")]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            await productServices.DeleteProduct(id);
+            return Ok(SuccessCode.DELETE_PRODUCT_SUCCESS);
+        }
+
         [HttpPost("addReview/{ProductId}")]
         public async Task<IActionResult> AddReview(Guid ProductId,[FromBody] AddProductReviewModel reviewModel)
         {
