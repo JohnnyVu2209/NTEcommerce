@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Moq;
 using NTEcommerce.SharedDataModel;
@@ -20,9 +21,11 @@ namespace NTEcommerce.WebAPI.Tests
         public async Task Test_Authentication_Login_Return_ResponseJWT()
         {
             var fakeUserManager = new Mock<FakeUserManager>();
+            var mockRoleManager = new Mock<RoleManager<Role>>();
             var config = new Mock<IConfiguration>();
+            var mockMapper = new Mock<IMapper>();
 
-            AuthenticationController controller = new(fakeUserManager.Object, config.Object);
+            AuthenticationController controller = new(fakeUserManager.Object, mockRoleManager.Object, config.Object, mockMapper.Object);
 
             var result = await controller.Login(new LoginModel { Username = "Admin", Password = "Admin123" });
 

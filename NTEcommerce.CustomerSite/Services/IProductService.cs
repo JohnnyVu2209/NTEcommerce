@@ -6,13 +6,9 @@ namespace NTEcommerce.CustomerSite.Services;
 [Headers("Content-Type: application/json")]
 public interface IProductService
 {
-    [Get("/api/Product/getListProducts")]
-    Task<List<ProductModel>> GetProducts(ProductParameters parameters);
-
-    [Get("/api/Product/getListProducts")]
-    Task<List<ProductModel>> GetProducts();
-
-    [Get("/api/Product/getProduct/{id}")]
-    Task<ProductDetailModel> GetProduct(Guid id);
+    Task<ApiResponse<List<ProductModel>>> GetProducts(ProductParameters parameters);
+    Task<ApiResponse<List<ProductModel>>> GetProducts();
+    Task<ApiResponse<ProductDetailModel>> GetProduct(Guid id);
+    Task<ApiResponse<ProductDetailModel>> AddReview(Guid id, AddProductReviewModel reviewModel);
 
 }

@@ -2,7 +2,7 @@
 
 namespace NTEcommerce.WebAPI.Model.Identity
 {
-    public class Role: IdentityRole<Guid>
+    public class Role : IdentityRole<Guid>
     {
     }
 }

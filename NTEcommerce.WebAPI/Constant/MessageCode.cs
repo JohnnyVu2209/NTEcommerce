@@ -6,12 +6,15 @@
         {
             public static string DELETE_CATEGORY_SUCCESS = "DELETE_CATEGORY_SUCCESSFULLY";
             public static string DELETE_PRODUCT_SUCCESS = "DELETE_PRODUCT_SUCCESSFULLY";
+            public static string USER_REGISTER_SUCCESSFULLY = "USER_REGISTER_SUCCESSFULLY";
         }
         public static class ErrorCode
         {
             //User
             public static string USER_NOT_FOUND = "ERR_USER_NOT_FOUND";
+            public static string USER_ALREADY_EXISTS = "ERR_USER_ALREADY_EXISTS";
             public static string USERNAME_OR_PASSWORD_NOT_CORRECT = "ERR_USERNAME_OR_PASSWORD_NOT_CORRECT";
+            public static string USER_REGISTER_FAILED = "ERR_USER_REGISTER_FAILED";
 
             //Category
             public static string CATEGORY_NAME_ALREADY_EXISTED = "ERR_CATEGORY_NAME_ALREADY_EXISTED";

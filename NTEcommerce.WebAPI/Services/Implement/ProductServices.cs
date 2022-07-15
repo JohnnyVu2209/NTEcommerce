@@ -49,20 +49,6 @@ namespace NTEcommerce.WebAPI.Services.Implement
             {
                 var newProduct = mapper.Map<Product>(productModel);
 
-                if (productModel.Images != null && productModel.Images.Count != 0)
-                {
-                    var imageName = productModel.Images.Select(x => x.FileName).ToList();
-                    var productImages = new List<ProductImage>();
-                    foreach (var image in imageName)
-                    {
-                        productImages.Add(new ProductImage
-                        {
-                            Name = image,
-                            Link = String.Format($"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/Product/{image}")
-                        });
-                    }
-                    newProduct.Images = productImages;
-                }
 
                 if (productModel.CategoryId != null)
                 {
@@ -72,13 +58,12 @@ namespace NTEcommerce.WebAPI.Services.Implement
                     newProduct.Category = category;
                 }
 
+                if (productModel.Images != null && productModel.Images.Count != 0)
+                {
+                    newProduct.Images = await SaveImages(productModel.Images);
+                }
                 await unitOfWork.Product.AddAsync(newProduct);
                 await unitOfWork.SaveAsync();
-
-                if (newProduct.Images != null && newProduct.Images.Count != 0)
-                {
-                    await SaveImages(productModel.Images);
-                }
 
                 var newProductModel = mapper.Map<ProductModel>(newProduct);
                 return newProductModel;
@@ -91,7 +76,7 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
         }
 
-        private async Task<List<string>> SaveImages(List<IFormFile> images)
+        private async Task<List<ProductImage>> SaveImages(List<IFormFile> images)
         {
 
             var rootPath = Path.Combine(environment.ContentRootPath, "Resource", "ProductImages");
@@ -113,7 +98,16 @@ namespace NTEcommerce.WebAPI.Services.Implement
                 }
                 listImageName.Add(myUniqueFileName);
             }
-            return listImageName;
+            var listProductImg = new List<ProductImage>();
+            foreach (var name in listImageName)
+            {
+                listProductImg.Add(new ProductImage
+                {
+                    Name = name,
+                    Link = String.Format($"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/Product/{name}")
+                });
+            }
+            return listProductImg;
         }
 
         private List<string> GetImages(ICollection<ProductImage> productImages)
@@ -208,14 +202,10 @@ namespace NTEcommerce.WebAPI.Services.Implement
 
             if (updateProductModel.Images != null && updateProductModel.Images.Count != 0)
             {
-                var imageName = updateProductModel.Images.Select(x => x.FileName).ToList();
-                foreach (var image in imageName)
+                var image = await SaveImages(updateProductModel.Images);
+                foreach (var file in image)
                 {
-                    product.Images.Add(new ProductImage
-                    {
-                        Name = image,
-                        Link = String.Format($"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/Product/{image}")
-                    });
+                    product.Images.Add(file);
                 }
             }
 

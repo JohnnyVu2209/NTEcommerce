@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using NTEcommerce.SharedDataModel;
 using NTEcommerce.SharedDataModel.User;
+using NTEcommerce.WebAPI.Constant;
 using NTEcommerce.WebAPI.Model.Identity;
-using NTEcommerce.WebAPI.Repository.Interface;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -20,15 +19,18 @@ namespace NTEcommerce.WebAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
         private readonly ILogger<AuthenticationController> _logger;
         private readonly IMapper _mapper;
         public AuthenticationController(
             UserManager<User> userManager,
+            RoleManager<Role> roleManager,
             IConfiguration configuration,
             IMapper mapper)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _configuration = configuration;
             _mapper = mapper;
         }
@@ -58,6 +60,57 @@ namespace NTEcommerce.WebAPI.Controllers
             }
             return Unauthorized(ErrorCode.USERNAME_OR_PASSWORD_NOT_CORRECT);
 
+        }
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
+        {
+            var userExists = await _userManager.FindByNameAsync(registerModel.UserName);
+            if (userExists != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { StatusCode = 500, Message = ErrorCode.USER_ALREADY_EXISTS });
+
+            User user = new()
+            {
+                Email = registerModel.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = registerModel.UserName
+            };
+            var result = await _userManager.CreateAsync(user, registerModel.Password);
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { StatusCode = 500, Message = ErrorCode.USER_REGISTER_FAILED});
+
+            return Ok(SuccessCode.USER_REGISTER_SUCCESSFULLY);
+        }
+        [HttpPost("register-admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
+        {
+            var userExists = await _userManager.FindByNameAsync(model.UserName);
+            if (userExists != null)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { StatusCode = 500, Message = ErrorCode.USER_ALREADY_EXISTS });
+
+            User user = new()
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.UserName
+            };
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponse { StatusCode = 500, Message =ErrorCode.USER_REGISTER_FAILED });
+
+            if (!await _roleManager.RoleExistsAsync(RoleConstant.Admin))
+                await _roleManager.CreateAsync(new Role { Name = RoleConstant.Admin});
+            if (!await _roleManager.RoleExistsAsync(RoleConstant.Customer))
+                await _roleManager.CreateAsync(new Role { Name = RoleConstant.Customer });
+
+            if (await _roleManager.RoleExistsAsync(RoleConstant.Admin))
+            {
+                await _userManager.AddToRoleAsync(user, RoleConstant.Admin);
+            }
+            if (await _roleManager.RoleExistsAsync(RoleConstant.Admin))
+            {
+                await _userManager.AddToRoleAsync(user, RoleConstant.Customer);
+            }
+            return Ok(SuccessCode.USER_REGISTER_SUCCESSFULLY);
         }
         [HttpGet("GetUserInfo/{username}")]
         [Authorize(Roles = "Admin")]
